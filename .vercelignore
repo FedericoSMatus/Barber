@@ -1,0 +1,8 @@
+# No se publican en Vercel
+supabase/
+equipo_de_barberos_profesionales/
+inicio_patagonia_grooming_neuqu_n/
+patagonian_modern_grooming/
+servicios_y_tarifas_en_pesos_argentinos/
+sistema_de_reserva_de_turnos_online/
+.env*

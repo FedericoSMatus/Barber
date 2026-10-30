@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>Panel de Turnos · Patagonia Grooming Co.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..700&family=Plus+Jakarta+Sans:wght@300..800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.min.js"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: { ink: '#1F2326', ink2: '#2F353A', bronze: '#B8864E', 'bronze-dark': '#805522', 'bronze-soft': '#FEC486', cream: '#F8F6F2', line: '#E5E0D8', field: '#D8D2C7', slate: '#6E757C', muted: '#44474A', tint: '#FAF5EE', wa: '#25D366' },
+    fontFamily: { serif: ['"Playfair Display"', 'serif'], sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+    boxShadow: { soft: '0 4px 20px -2px rgba(31,35,38,.06), 0 2px 6px -1px rgba(31,35,38,.04)' }
+  } }
+}
+</script>
+<style>
+  body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400; vertical-align: middle; line-height: 1; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #805522; }
+  .field { width: 100%; border: 1px solid #D8D2C7; background: #fff; border-radius: 4px; padding: .65rem .8rem; font-size: 14px; outline: none; }
+  .field:focus { border-color: #B8864E; box-shadow: 0 0 0 1px #B8864E; }
+</style>
+</head>
+<body class="bg-cream text-ink antialiased min-h-screen">
+
+<header class="bg-white border-b border-line">
+  <div class="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between gap-3">
+    <div class="leading-none"><div class="font-semibold">Patagonia Grooming Co.</div><div class="text-[11px] font-semibold uppercase tracking-wider text-bronze-dark mt-1">Panel de turnos</div></div>
+    <div id="userBox" class="hidden items-center gap-3 text-sm"><span id="userEmail" class="text-slate hidden sm:inline"></span><button id="logoutBtn" class="px-3 py-2 rounded border border-line hover:border-bronze text-xs font-semibold uppercase tracking-wider">Salir</button></div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 md:px-6 py-8">
+  <!-- Login -->
+  <section id="loginView" class="hidden max-w-sm mx-auto mt-10">
+    <div class="eyebrow">Acceso restringido</div>
+    <h1 class="font-serif text-3xl mt-2">Ingresar al panel</h1>
+    <form id="loginForm" class="bg-white border border-line rounded-lg p-6 mt-6 space-y-4">
+      <label class="block"><span class="text-[11px] font-semibold uppercase tracking-wider">Email</span><input id="lEmail" type="email" autocomplete="username" required class="field mt-1.5"/></label>
+      <label class="block"><span class="text-[11px] font-semibold uppercase tracking-wider">Contraseña</span><input id="lPass" type="password" autocomplete="current-password" required class="field mt-1.5"/></label>
+      <button class="w-full py-3 rounded bg-ink text-cream font-semibold text-sm hover:bg-ink2">Ingresar</button>
+      <p id="loginMsg" class="text-sm text-red-700 hidden"></p>
+    </form>
+  </section>
+
+  <!-- Panel -->
+  <section id="panelView" class="hidden">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div><div class="eyebrow">Gestión de solicitudes</div><h1 class="font-serif text-3xl mt-1">Turnos</h1></div>
+      <div class="flex flex-wrap items-end gap-2 text-sm">
+        <label><span class="block text-[11px] font-semibold uppercase tracking-wider text-slate">Desde</span><input id="fDesde" type="date" class="field mt-1 !py-2"/></label>
+        <label><span class="block text-[11px] font-semibold uppercase tracking-wider text-slate">Hasta</span><input id="fHasta" type="date" class="field mt-1 !py-2"/></label>
+        <button id="reloadBtn" class="h-[38px] px-3 rounded border border-line bg-white hover:border-bronze" aria-label="Actualizar"><span class="material-symbols-outlined">refresh</span></button>
+      </div>
+    </div>
+    <div id="tabs" class="flex gap-2 mt-6 overflow-x-auto"></div>
+    <p id="listMsg" class="text-sm text-slate mt-6 hidden"></p>
+    <div id="list" class="grid gap-4 mt-6"></div>
+  </section>
+</main>
+
+<div id="toast" role="status" aria-live="polite" class="hidden fixed z-50 bottom-6 inset-x-4 mx-auto max-w-lg rounded-lg shadow-soft bg-ink text-cream px-4 py-3 text-sm"></div>
+
+<script>
+const BUSINESS = 'Patagonia Grooming Co.';
+const TZ = 'America/Argentina/Buenos_Aires';
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const money = n => '$ ' + Number(n).toLocaleString('es-AR');
+const fmtDate = iso => new Date(iso).toLocaleDateString('es-AR', { timeZone: TZ, weekday: 'long', day: 'numeric', month: 'long' });
+const fmtTime = iso => new Date(iso).toLocaleTimeString('es-AR', { timeZone: TZ, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+const fmtStamp = iso => new Date(iso).toLocaleString('es-AR', { timeZone: TZ, day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+const localKey = d => d.toLocaleDateString('en-CA', { timeZone: TZ });
+const statusUrl = token => `${location.origin}/#turno/${token}`;
+// Teléfono del cliente → formato wa.me (Argentina: 549 + área + número)
+const waNumber = digits => digits.startsWith('54') ? digits : '549' + digits.replace(/^0/, '');
+
+const ESTADOS = {
+  PENDIENTE:  { label: 'Pendiente',  cls: 'bg-bronze-soft/60 text-bronze-dark', icon: 'hourglass_top' },
+  CONFIRMADO: { label: 'Confirmado', cls: 'bg-emerald-100 text-emerald-800',    icon: 'check_circle' },
+  RECHAZADO:  { label: 'Rechazado',  cls: 'bg-red-100 text-red-800',            icon: 'cancel' },
+  CANCELADO:  { label: 'Cancelado',  cls: 'bg-cream text-muted border border-line', icon: 'event_busy' }
+};
+const TABS = [['PENDIENTE', 'Pendientes'], ['CONFIRMADO', 'Confirmados'], ['', 'Todos']];
+let sb = null, session = null, tab = 'PENDIENTE', reservas = [];
+
+function toast(html, ms = 8000) {
+  const t = $('#toast'); t.innerHTML = html; t.classList.remove('hidden');
+  clearTimeout(toast.timer); toast.timer = setTimeout(() => t.classList.add('hidden'), ms);
+}
+
+async function api(path, opts = {}) {
+  const res = await fetch(path, { ...opts, headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}`, ...(opts.headers || {}) } });
+  const body = await res.json().catch(() => ({}));
+  if (res.status === 401) { await sb.auth.signOut(); throw new Error('Tu sesión venció. Ingresá de nuevo.'); }
+  if (!res.ok) throw new Error(body.error || `Error ${res.status}`);
+  return body;
+}
+
+function show(view) {
+  $('#loginView').classList.toggle('hidden', view !== 'login');
+  $('#panelView').classList.toggle('hidden', view !== 'panel');
+  $('#userBox').classList.toggle('hidden', view !== 'panel'); $('#userBox').classList.toggle('flex', view === 'panel');
+}
+
+async function load() {
+  const params = new URLSearchParams();
+  if (tab) params.set('estado', tab);
+  if ($('#fDesde').value) params.set('desde', $('#fDesde').value);
+  if ($('#fHasta').value) params.set('hasta', $('#fHasta').value);
+  $('#listMsg').classList.remove('hidden'); $('#listMsg').textContent = 'Cargando…';
+  try {
+    reservas = (await api('/api/admin/reservas?' + params)).reservas;
+    render();
+  } catch (e) {
+    $('#listMsg').textContent = e.message;
+    if (/permisos/.test(e.message)) { await sb.auth.signOut(); }
+  }
+}
+
+function renderTabs() {
+  $('#tabs').innerHTML = TABS.map(([id, l]) => `<button data-tab="${id}" class="shrink-0 px-4 py-2 rounded text-xs font-semibold uppercase tracking-wider ${tab === id ? 'bg-ink text-cream' : 'bg-white border border-line hover:border-bronze'}">${l}</button>`).join('');
+}
+
+function render() {
+  renderTabs();
+  $('#listMsg').classList.toggle('hidden', reservas.length > 0);
+  $('#listMsg').textContent = 'No hay turnos para este filtro.';
+  $('#list').innerHTML = reservas.map(r => {
+    const e = ESTADOS[r.estado];
+    const hist = [...(r.reservas_historial || [])].sort((a, b) => a.created_at.localeCompare(b.created_at));
+    const actions = r.estado === 'PENDIENTE'
+      ? `<button data-act="CONFIRMADO" data-id="${r.id}" class="px-4 py-2.5 rounded bg-bronze text-white text-sm font-semibold hover:bg-bronze-dark">Confirmar</button>
+         <button data-act="RECHAZADO" data-id="${r.id}" class="px-4 py-2.5 rounded border border-ink text-sm font-semibold hover:bg-cream">Rechazar</button>
+         <button data-act="CANCELADO" data-id="${r.id}" class="px-4 py-2.5 rounded text-sm text-slate hover:text-ink">Cancelar</button>`
+      : r.estado === 'CONFIRMADO'
+        ? `<button data-act="CANCELADO" data-id="${r.id}" class="px-4 py-2.5 rounded border border-ink text-sm font-semibold hover:bg-cream">Cancelar turno</button>` : '';
+    return `<article class="bg-white border border-line rounded-lg p-5 grid md:grid-cols-[180px_1fr_auto] gap-4">
+      <div>
+        <div class="text-xs text-slate capitalize">${fmtDate(r.inicio)}</div>
+        <div class="font-serif text-3xl">${fmtTime(r.inicio)}</div>
+        <div class="text-xs text-slate">hasta ${fmtTime(r.fin)} · ${r.duracion_min} min</div>
+        <span class="inline-flex items-center gap-1 mt-3 text-xs font-semibold px-2 py-1 rounded ${e.cls}"><span class="material-symbols-outlined text-[16px]">${e.icon}</span>${e.label}</span>
+        ${r.estado === 'PENDIENTE' && r.expira_en ? `<div class="text-[11px] text-bronze-dark mt-1">Vence ${fmtStamp(r.expira_en)} hs</div>` : ''}
+      </div>
+      <div class="text-sm min-w-0">
+        <div class="flex flex-wrap items-baseline gap-2"><span class="font-semibold text-base">${esc(r.cliente_nombre)}</span><span class="text-xs text-slate">Código ${esc(r.codigo)}</span></div>
+        <div class="mt-1">${r.servicios.map(s => esc(s.nombre)).join(' + ')} · <b>${money(r.total_ars)}</b></div>
+        <div class="text-slate">Barbero: ${esc(r.barberos?.nombre || r.barbero_id)}${r.asignado_automaticamente ? ' (asignado automáticamente)' : ''}</div>
+        <div class="flex flex-wrap gap-x-4 gap-y-1 mt-2">
+          <a class="text-bronze-dark hover:underline" target="_blank" rel="noopener" href="https://wa.me/${waNumber(r.cliente_telefono)}">📱 ${esc(r.cliente_telefono)}</a>
+          ${r.cliente_email ? `<a class="text-bronze-dark hover:underline" href="mailto:${esc(r.cliente_email)}">✉️ ${esc(r.cliente_email)}</a>` : ''}
+        </div>
+        ${r.notas ? `<p class="mt-2 bg-cream rounded px-3 py-2 text-xs">📝 ${esc(r.notas)}</p>` : ''}
+        ${r.motivo ? `<p class="mt-2 text-xs text-slate">Motivo: ${esc(r.motivo)}</p>` : ''}
+        <details class="mt-2 text-xs text-slate"><summary class="cursor-pointer">Historial (${hist.length})</summary>
+          <ul class="mt-1 space-y-0.5">${hist.map(h => `<li>${fmtStamp(h.created_at)} · ${h.estado_anterior ? esc(h.estado_anterior) + ' → ' : ''}<b>${esc(h.estado_nuevo)}</b> · ${esc(h.cambiado_por)}${h.motivo ? ' · ' + esc(h.motivo) : ''}</li>`).join('')}</ul></details>
+      </div>
+      <div class="flex md:flex-col gap-2 flex-wrap md:items-stretch">${actions}
+        <a href="${notifyLink(r)}" target="_blank" rel="noopener" class="px-4 py-2.5 rounded border border-line text-sm text-center hover:border-bronze inline-flex items-center justify-center gap-1"><span class="material-symbols-outlined text-[18px] text-wa">chat</span>Avisar</a>
+      </div>
+    </article>`;
+  }).join('');
+}
+
+// Mensaje de WhatsApp al cliente según el estado actual de la reserva
+function notifyLink(r) {
+  const when = `${fmtDate(r.inicio)} a las ${fmtTime(r.inicio)} hs`;
+  const nombre = r.cliente_nombre.split(' ')[0];
+  const text = {
+    PENDIENTE: `¡Hola ${nombre}! Recibimos tu solicitud ${r.codigo} para el ${when}. Te confirmamos a la brevedad.`,
+    CONFIRMADO: `¡Hola ${nombre}! Tu turno en ${BUSINESS} quedó CONFIRMADO ✅\n📅 ${when}\n💈 ${r.barberos?.nombre || ''}\n📍 Av. Argentina 450, Neuquén\n\nAgregalo a tu Google Calendar desde acá: ${statusUrl(r.token)}`,
+    RECHAZADO: `¡Hola ${nombre}! Lamentablemente no pudimos confirmar tu solicitud ${r.codigo} para el ${when}${r.motivo ? ' (' + r.motivo + ')' : ''}. Podés elegir otro horario acá: ${location.origin}/#reservar`,
+    CANCELADO: `¡Hola ${nombre}! Tu turno ${r.codigo} del ${when} quedó cancelado${r.motivo ? ' (' + r.motivo + ')' : ''}. Cuando quieras reservás de nuevo acá: ${location.origin}/#reservar`
+  }[r.estado];
+  return `https://wa.me/${waNumber(r.cliente_telefono)}?text=${encodeURIComponent(text)}`;
+}
+
+async function changeState(id, estado) {
+  const r = reservas.find(x => x.id === id);
+  let motivo = null;
+  if (estado !== 'CONFIRMADO') {
+    motivo = prompt(`Motivo para ${estado === 'RECHAZADO' ? 'rechazar' : 'cancelar'} el turno de ${r.cliente_nombre} (opcional):`, '');
+    if (motivo === null) return;
+  } else if (!confirm(`¿Confirmar el turno de ${r.cliente_nombre} el ${fmtDate(r.inicio)} a las ${fmtTime(r.inicio)}?`)) return;
+  try {
+    const { reserva } = await api('/api/admin/estado', { method: 'POST', body: JSON.stringify({ id, estado, motivo: motivo || null }) });
+    const updated = { ...r, ...reserva, barberos: r.barberos };
+    toast(`Turno ${esc(r.codigo)} → <b>${estado}</b>. <a class="underline font-semibold" target="_blank" rel="noopener" href="${notifyLink(updated)}">Avisar al cliente por WhatsApp</a>`, 15000);
+    await load();
+  } catch (e) {
+    toast('⚠️ ' + esc(e.message));
+    await load();
+  }
+}
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-tab],[data-act]');
+  if (!t) return;
+  if (t.dataset.act) changeState(t.dataset.id, t.dataset.act);
+  else { tab = t.dataset.tab; load(); }
+});
+$('#reloadBtn').addEventListener('click', load);
+$('#fDesde').addEventListener('change', load);
+$('#fHasta').addEventListener('change', load);
+$('#logoutBtn').addEventListener('click', () => sb.auth.signOut());
+$('#loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const msg = $('#loginMsg'); msg.classList.add('hidden');
+  const { error } = await sb.auth.signInWithPassword({ email: $('#lEmail').value.trim(), password: $('#lPass').value });
+  if (error) { msg.textContent = 'Email o contraseña incorrectos.'; msg.classList.remove('hidden'); }
+});
+
+(async function init() {
+  // Mismo alcance que el turnero: los clientes reservan hasta 60 días adelante
+  const today = new Date(); const until = new Date(today); until.setDate(until.getDate() + 60);
+  $('#fDesde').value = localKey(today); $('#fHasta').value = localKey(until);
+  try {
+    const res = await fetch('/api/config', { cache: 'no-store' });
+    if (!res.ok) throw new Error();
+    const { supabaseUrl, supabaseAnonKey } = await res.json();
+    sb = window.supabase.createClient(supabaseUrl, supabaseAnonKey, { auth: { persistSession: true, autoRefreshToken: true } });
+  } catch {
+    show('login'); $('#loginForm').innerHTML = '<p class="text-sm text-red-700">El panel no está configurado: faltan las variables de entorno de Supabase en Vercel.</p>';
+    return;
+  }
+  sb.auth.onAuthStateChange((_ev, s) => {
+    const was = session; session = s;
+    if (!s) { reservas = []; show('login'); return; }
+    $('#userEmail').textContent = s.user.email;
+    show('panel');
+    if (!was) load();
+  });
+  setInterval(() => { if (session && !document.hidden) load(); }, 60000);
+})();
+</script>
+</body>
+</html>

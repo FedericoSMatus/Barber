@@ -2,3 +2,13 @@
 */code.html
 */screen.png
 */DESIGN.md
+
+# Dependencias y secretos
+node_modules/
+.env
+.env*.local
+.vercel
+
+# Archivos del editor
+.vs/
+.vscode/

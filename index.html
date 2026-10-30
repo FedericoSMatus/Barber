@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300..800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.min.js"></script>
 <script>
 tailwind.config = {
   theme: {
@@ -319,6 +320,15 @@ tailwind.config = {
   </div>
 </section>
 
+<!-- ============ SEGUIMIENTO DE TURNO (#turno/<token>) ============ -->
+<section class="page" data-page="turno">
+  <div class="max-w-site mx-auto px-4 md:px-6 py-12 md:py-16">
+    <div class="eyebrow">Seguimiento de Turno</div>
+    <h1 class="font-serif text-[34px] leading-[40px] md:text-[44px] md:leading-[52px] mt-3">Estado de tu solicitud</h1>
+    <div id="turnoBox" class="mt-8 max-w-2xl" aria-live="polite"></div>
+  </div>
+</section>
+
 <!-- ============ UBICACIÓN ============ -->
 <section class="page" data-page="ubicacion">
   <div class="max-w-site mx-auto px-4 md:px-6 py-12 md:py-16">
@@ -350,7 +360,7 @@ tailwind.config = {
   <div class="max-w-site mx-auto px-4 md:px-6 py-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm">
     <div><div class="flex items-center gap-2"><img data-img="logo" alt="" class="h-7 w-7"/><span class="font-semibold">Patagonia Grooming Co.</span></div><p class="text-muted mt-3">Santuario de estilismo masculino, corte clásico y afeitado tradicional con navaja en el corazón del Alto Valle de Neuquén.</p></div>
     <div><div class="eyebrow">Ubicación</div><p class="mt-3 font-semibold">Neuquén Capital, Argentina</p><p class="text-muted">Av. Argentina 450 &amp; Diagonal Alvear</p><p class="mt-2" data-phone-display></p></div>
-    <div><div class="eyebrow">Horarios</div><p class="mt-3 font-semibold">Lunes a Viernes</p><p class="text-muted">09:30 – 20:30 hs (corrido)</p><p class="mt-2 font-semibold">Sábados</p><p class="text-muted">09:00 – 21:00 hs · Domingos cerrado</p></div>
+    <div><div class="eyebrow">Horarios</div><div id="footerHours"><p class="mt-3 font-semibold">Lunes a Viernes</p><p class="text-muted">09:30 – 20:30 hs (corrido)</p><p class="mt-2 font-semibold">Sábados</p><p class="text-muted">09:00 – 21:00 hs · Domingos cerrado</p></div></div>
     <div><div class="eyebrow">Medios de Pago</div><div class="flex flex-wrap gap-2 mt-3"><span class="px-2 py-1 bg-cream rounded text-xs">Efectivo</span><span class="px-2 py-1 bg-cream rounded text-xs">Mercado Pago</span><span class="px-2 py-1 bg-cream rounded text-xs">Débito</span><span class="px-2 py-1 bg-cream rounded text-xs">Transferencia</span></div></div>
   </div>
   <div class="border-t border-line"><div class="max-w-site mx-auto px-4 md:px-6 py-5 text-xs text-slate flex flex-col sm:flex-row justify-between gap-2"><span>© <span id="year"></span> Patagonia Grooming Co. Neuquén, Patagonia Argentina.</span><span>Cancelaciones sin costo hasta 2 h antes.</span></div></div>
@@ -361,25 +371,34 @@ tailwind.config = {
   <svg viewBox="0 0 32 32" class="w-7 h-7 fill-white" aria-hidden="true"><path d="M16 3C8.8 3 3 8.7 3 15.8c0 2.5.7 4.9 2 7L3 29l6.4-2c2 1.1 4.3 1.7 6.6 1.7 7.2 0 13-5.7 13-12.8S23.2 3 16 3zm0 23.4c-2.1 0-4.1-.6-5.9-1.7l-.4-.3-3.8 1.2 1.2-3.7-.3-.4c-1.2-1.8-1.9-3.8-1.9-6 0-5.9 4.9-10.7 11-10.7s11 4.8 11 10.7-4.9 10.9-10.9 10.9zm6-8c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.8.2-.2.3-.9 1.1-1.1 1.3-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.7-1.7-1-.9-1.7-2-1.9-2.3-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.4.3-.6.1-.2 0-.4 0-.6l-1.1-2.5c-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.2 1.4 3.5c.2.2 2.4 3.6 5.8 5 .8.4 1.4.6 1.9.7.8.3 1.6.2 2.2.1.7-.1 2-.8 2.3-1.6.3-.8.3-1.5.2-1.6-.1-.1-.3-.2-.6-.4z"/></svg>
 </a>
 
+<!-- Aviso flotante -->
+<div id="toast" role="status" aria-live="assertive" class="hidden fixed z-[70] top-24 inset-x-4 mx-auto max-w-md rounded-lg shadow-soft px-4 py-3 text-sm font-medium flex items-start gap-2"></div>
+
 <!-- Modal de confirmación -->
 <div id="modal" class="fixed inset-0 z-[60] hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="absolute inset-0 bg-ink/60" data-close></div>
   <div class="absolute inset-x-4 top-1/2 -translate-y-1/2 mx-auto max-w-md bg-white rounded-lg shadow-soft overflow-hidden max-h-[90vh] overflow-y-auto">
     <div class="bg-ink text-cream p-6">
-      <div class="text-xs uppercase tracking-widest text-bronze-soft font-semibold">Último paso</div>
+      <div id="modalEyebrow" class="text-xs uppercase tracking-widest text-bronze-soft font-semibold">Último paso</div>
       <h3 id="modalTitle" class="font-serif text-2xl mt-1">Enviá tu pedido de turno</h3>
+      <div id="modalStatus" class="hidden mt-3 items-center gap-1.5 text-xs font-semibold bg-bronze-soft text-bronze-dark px-2.5 py-1 rounded"><span class="material-symbols-outlined text-[16px]">hourglass_top</span>Pendiente de confirmación</div>
     </div>
     <div class="p-6">
+      <p id="modalNotice" class="hidden text-xs rounded p-3 mb-4"></p>
       <dl id="modalSummary" class="text-sm space-y-2"></dl>
       <ol class="mt-6 space-y-3">
         <li><a id="waBtn" target="_blank" rel="noopener" class="w-full flex items-center gap-3 px-4 py-3.5 rounded bg-wa text-white font-semibold hover:brightness-95">
           <span class="w-6 h-6 rounded-full bg-white/25 grid place-items-center text-xs">1</span>Enviar pedido por WhatsApp<span class="material-symbols-outlined ml-auto">send</span></a>
           <p class="text-xs text-slate mt-1.5">Se abre WhatsApp con el mensaje listo. Te respondemos confirmando el turno.</p></li>
-        <li><a id="gcalBtn" target="_blank" rel="noopener" class="w-full flex items-center gap-3 px-4 py-3.5 rounded border border-ink font-semibold hover:bg-cream">
-          <span class="w-6 h-6 rounded-full bg-cream grid place-items-center text-xs">2</span>Agregar a Google Calendar<span class="material-symbols-outlined ml-auto">event_available</span></a>
-          <p class="text-xs text-slate mt-1.5">Guardá el turno en tu calendario con dirección y recordatorio.</p></li>
+        <li id="trackItem" class="hidden"><a id="trackBtn" class="w-full flex items-center gap-3 px-4 py-3.5 rounded border border-ink font-semibold hover:bg-cream">
+          <span class="w-6 h-6 rounded-full bg-cream grid place-items-center text-xs">2</span>Seguir el estado de mi turno<span class="material-symbols-outlined ml-auto">pending_actions</span></a>
+          <p class="text-xs text-slate mt-1.5">Guardá este enlace: ahí vas a ver cuando lo confirmemos y podrás agregarlo a Google Calendar.</p></li>
+        <li><a id="gcalBtn" target="_blank" rel="noopener" class="w-full flex items-center gap-3 px-4 py-3 rounded border border-line text-sm font-semibold hover:bg-cream">
+          <span class="material-symbols-outlined text-[18px] text-bronze">event</span><span id="gcalLabel">Agendar como pendiente en Google Calendar</span></a>
+          <p class="text-xs text-slate mt-1.5">Opcional. El evento queda marcado como “PENDIENTE”: no es un turno confirmado.</p></li>
       </ol>
-      <button class="mt-6 w-full text-sm text-slate hover:text-ink" data-close>Volver y editar</button>
+      <button id="retryBtn" class="hidden mt-4 w-full py-3 rounded bg-ink text-cream text-sm font-semibold hover:bg-ink2">Reintentar registro online</button>
+      <button id="modalCloseBtn" class="mt-6 w-full text-sm text-slate hover:text-ink" data-close>Volver y editar</button>
     </div>
   </div>
 </div>
@@ -408,7 +427,7 @@ const IMG = {
   hero: 'AB6AXuDd7W6moqPYioFT0yjm1yXOIDi-81bu5uGhzNvppJKk7Nvv_m-WlaGkjT3AvgR3qY4P-IltXUYU-eUCpw0JDi3D2zbk5JBxf8QQRNeZtA0SUGvXLRymB_dZgpa6aXJhLd3xGhTgVxjNFiEhwE3R_1ZGsWedK4tZ7ap6i8YYzsb8IdUCkmh5MwoOCbm4EemvY3tAW9TbvbMuFGRNs-sNCBUC2qyBlFAUqMVZauI9OnU',
   razor: 'AB6AXuDZ7q4WC9AnTPZ88FzEx7Afe8jdJ7RwMjpYIkSygGWWaLGAX2CBWyQq3yE9ZthM7hiv_4FVN1Z3wFcbNXVBXrcsHtoswkZjGxYBD639gw9vPxEyZsf9mu7jEeFcGDXtM2PZtMAA75MVKudAwoJiVO6oMqtHk1_Bp_mk57Rdpy_mEQTmTU-obN6Mkka_VleBQDcVWAKAR-TSiIyE5TEcfgbwD0vWocaKNusFa2ieIRY'
 };
-const img = id => IMG_BASE + id;
+const img = id => IMG_BASE + (id || IMG.logo);
 
 /* Servicios: cat = cabello | barba | combos | tratamientos */
 const CATEGORIES = [
@@ -502,6 +521,24 @@ const sameDay = (a, b) => a && b && a.toDateString() === b.toDateString();
 const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
 const longDate = d => d.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
 const waLink = text => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
+const dateKey = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+// Fecha/hora "de pared" en Neuquén, sin importar la zona horaria del navegador
+const AR_FMT = new Intl.DateTimeFormat('en-CA', { timeZone: CONFIG.timezone, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+function arParts(d) {
+  const p = Object.fromEntries(AR_FMT.formatToParts(d).map(x => [x.type, x.value]));
+  return { key: `${p.year}-${p.month}-${p.day}`, min: +p.hour * 60 + +p.minute, y: +p.year, m: +p.month, d: +p.day };
+}
+const arDate = iso => { const p = arParts(new Date(iso)); return new Date(p.y, p.m - 1, p.d, Math.floor(p.min / 60), p.min % 60); };
+const statusUrl = token => `${location.origin}${location.pathname}#turno/${token}`;
+const holdUntil = iso => { const d = arDate(iso); return `${d.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' })} a las ${pad(d.getHours())}:${pad(d.getMinutes())} hs`; };
+
+let toastTimer;
+function toast(msg, kind = 'error') {
+  const el = $('#toast');
+  el.className = `fixed z-[70] top-24 inset-x-4 mx-auto max-w-md rounded-lg shadow-soft px-4 py-3 text-sm font-medium flex items-start gap-2 ${kind === 'error' ? 'bg-red-50 text-red-800 border border-red-200' : 'bg-white text-ink border border-line'}`;
+  el.innerHTML = `<span class="material-symbols-outlined text-[18px]">${kind === 'error' ? 'error' : 'check_circle'}</span><span>${esc(msg)}</span>`;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.add('hidden'), 7000);
+}
 
 /* =========================================================
    Router (una sola página, varias secciones)
@@ -522,7 +559,8 @@ function go(h) {
 
 function route(h = location.hash.slice(1)) {
   const [page, anchor] = (h || 'inicio').split('/');
-  const target = PAGES.some(p => p[0] === page) ? page : 'inicio';
+  const target = PAGES.some(p => p[0] === page) || page === 'turno' ? page : 'inicio';
+  if (!$('#modal').classList.contains('hidden')) closeModal();
   $$('.page').forEach(p => p.classList.toggle('active', p.dataset.page === target));
   $$('[data-nav]').forEach(a => {
     const on = a.dataset.nav === target;
@@ -531,10 +569,13 @@ function route(h = location.hash.slice(1)) {
   });
   closeMenu();
   $('#waFloat').classList.toggle('max-lg:hidden', target === 'reservar'); // en el turnero móvil ya está la barra inferior
-  document.title = (target === 'inicio' ? '' : PAGES.find(p => p[0] === target)[1] + ' · ') + 'Patagonia Grooming Co. · Neuquén';
-  const el = anchor && document.getElementById(anchor);
+  const label = target === 'turno' ? 'Seguimiento de Turno' : PAGES.find(p => p[0] === target)[1];
+  document.title = (target === 'inicio' ? '' : label + ' · ') + 'Patagonia Grooming Co. · Neuquén';
+  const el = anchor && target !== 'turno' && document.getElementById(anchor);
   if (el) requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth' }));
   else window.scrollTo({ top: 0 });
+  if (target === 'turno') loadTurno(anchor);
+  if (target === 'reservar' && DB.client && Date.now() - DB.busyLoadedAt > 60000) loadBusy();
 }
 
 function closeMenu() { $('#mobileNav').classList.add('hidden'); $('#mobileNav').classList.remove('flex'); $('#menuBtn').setAttribute('aria-expanded', 'false'); }
@@ -633,8 +674,12 @@ function renderLocation() {
     const h = CONFIG.hours[d];
     return `<tr class="${d === today ? 'font-semibold text-ink' : 'text-muted'}"><td class="py-0.5 pr-4">${names[d]}${d === today ? ' (hoy)' : ''}</td><td class="text-right">${h ? h.join(' – ') + ' hs' : 'Cerrado'}</td></tr>`;
   }).join('');
+  $('#footerHours').innerHTML = hoursToText(CONFIG.hours).map(t => { const [days, range] = t.split(' · ');
+    return `<p class="mt-3 font-semibold">${days}</p><p class="text-muted">${range.replace(' a ', ' – ')}</p>`; }).join('') +
+    (CONFIG.hours[0] ? '' : '<p class="mt-2 text-muted">Domingos cerrado</p>');
   const q = encodeURIComponent(CONFIG.address);
-  $('#mapFrame').src = `https://www.google.com/maps?q=${q}&output=embed`;
+  const map = `https://www.google.com/maps?q=${q}&output=embed`;
+  if ($('#mapFrame').src !== map) $('#mapFrame').src = map;
   $('#gpsLink').href = `https://www.google.com/maps/dir/?api=1&destination=${q}`;
 }
 
@@ -655,16 +700,95 @@ const totalMin = () => selectedServices().reduce((a, s) => a + s.min, 0);
 const totalPrice = () => selectedServices().reduce((a, s) => a + s.price, 0);
 const barberObj = () => BARBERS.find(b => b.id === state.barber);
 const barberLabel = () => barberObj() ? barberObj().name : 'Cualquier barbero disponible';
-const hoursFor = (barberId, day) => barberId === 'any' ? CONFIG.hours[day] : (BARBERS.find(b => b.id === barberId).hours[day] || null);
+/* --- Supabase: conexión, ocupación y solicitudes ---
+   La URL y la clave pública se leen de /api/config (variables de entorno de Vercel).
+   Si no hay conexión, la web sigue funcionando con el envío por WhatsApp. */
+const DB = { client: null, ready: null, busy: [], busyLoadedAt: 0, holdHours: 12 };
+
+// Agrupa días consecutivos con el mismo horario: { 2: ['10:00','19:30'], … } → ['Martes a Viernes · 10:00 a 19:30 hs', …]
+function hoursToText(hours) {
+  const names = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  const plural = n => n.endsWith('s') ? n : n + 's';
+  const groups = [];
+  [1, 2, 3, 4, 5, 6, 0].forEach((d, i) => {
+    const h = hours[d]; if (!h) return;
+    const g = groups[groups.length - 1], key = h.join('-');
+    if (g && g.key === key && g.last === i - 1) { g.to = d; g.last = i; } else groups.push({ key, from: d, to: d, last: i, h });
+  });
+  return groups.map(g => `${g.from === g.to ? plural(names[g.from]) : names[g.from] + ' a ' + plural(names[g.to])} · ${g.h[0]} a ${g.h[1]} hs`);
+}
+
+// Supabase es la fuente oficial de precios, duraciones y horarios.
+// Textos, fotos e íconos siguen en SERVICES/BARBERS; los valores se reemplazan por los de la base.
+async function loadCatalog() {
+  const { data, error } = await DB.client.rpc('obtener_catalogo');
+  if (error || !data) { console.warn('No se pudo leer el catálogo:', error && error.message); return; }
+  const localS = new Map(SERVICES.map(s => [s.id, s]));
+  const nextS = data.servicios.map(r => ({ icon: 'content_cut', desc: '', ...localS.get(r.id), id: r.id, cat: r.categoria, name: r.nombre, min: r.duracion_min, price: r.precio_ars }));
+  SERVICES.splice(0, SERVICES.length, ...nextS);
+  [...state.services].forEach(id => { if (!nextS.some(s => s.id === id)) state.services.delete(id); });
+
+  const hours = {};
+  data.horarios_barbero.forEach(h => { (hours[h.barbero_id] ||= {})[h.dia_semana] = [h.abre, h.cierra]; });
+  const order = BARBERS.map(b => b.id);
+  const localB = new Map(BARBERS.map(b => [b.id, b]));
+  const nextB = data.barberos.map(r => {
+    const base = localB.get(r.id) || { short: r.nombre.split(' ')[0], role: 'Barbero', badge: 'Barbero', cat: 'clasico', years: '', rating: '–', reviews: 0, photo: null, quote: '', bio: '', skills: [], works: [] };
+    return { ...base, id: r.id, name: r.nombre, hours: hours[r.id] || {}, hoursText: hoursToText(hours[r.id] || {}) };
+  }).sort((a, b) => (order.indexOf(a.id) + 1 || 99) - (order.indexOf(b.id) + 1 || 99));
+  BARBERS.splice(0, BARBERS.length, ...nextB);
+  if (state.barber !== 'any' && !BARBERS.some(b => b.id === state.barber)) state.barber = 'any';
+
+  CONFIG.hours = { 0: null, 1: null, 2: null, 3: null, 4: null, 5: null, 6: null };
+  data.horarios_local.forEach(h => { CONFIG.hours[h.dia_semana] = [h.abre, h.cierra]; });
+  DB.holdHours = data.plazo_pendiente_horas;
+
+  renderHome(); renderServices(); renderStaff(); renderLocation(); renderOpenBadge(); refreshBooking();
+}
+
+async function initSupabase() {
+  if (!window.supabase) return null;
+  try {
+    const res = await fetch('/api/config', { cache: 'no-store' });
+    if (!res.ok) throw new Error('config ' + res.status);
+    const { supabaseUrl, supabaseAnonKey } = await res.json();
+    if (!supabaseUrl || !supabaseAnonKey) return null;
+    return window.supabase.createClient(supabaseUrl, supabaseAnonKey, { auth: { persistSession: false, autoRefreshToken: false } });
+  } catch (e) {
+    console.warn('Reservas online no disponibles:', e.message);
+    return null;
+  }
+}
+
+// Turnos PENDIENTES y CONFIRMADOS de los próximos días (sin datos personales)
+async function loadBusy() {
+  if (!DB.client) return;
+  const today = startOfDay(new Date()), until = new Date(today); until.setDate(until.getDate() + CONFIG.daysAhead);
+  const { data, error } = await DB.client.rpc('obtener_ocupacion', { p_desde: dateKey(today), p_hasta: dateKey(until) });
+  if (error) { console.warn('No se pudo leer la ocupación:', error.message); return; }
+  DB.busy = data.map(r => { const s = arParts(new Date(r.inicio)), e = arParts(new Date(r.fin)); return { barbero_id: r.barbero_id, key: s.key, s: s.min, e: e.key === s.key ? e.min : 24 * 60 }; });
+  DB.busyLoadedAt = Date.now();
+  renderBookBarbers(); renderCalendar(); renderSummary();
+}
+
+// ¿El barbero atiende en ese rango y no tiene otro turno superpuesto?
+function barberCanTake(id, date, t, need) {
+  const h = BARBERS.find(b => b.id === id).hours[date.getDay()];
+  if (!h || t < toMin(h[0]) || t + need > toMin(h[1])) return false;
+  const key = dateKey(date);
+  return !DB.busy.some(b => b.barbero_id === id && b.key === key && b.s < t + need && b.e > t);
+}
 
 function slotsFor(date) {
-  const h = hoursFor(state.barber, date.getDay());
+  const h = CONFIG.hours[date.getDay()];
   if (!h) return [];
   const need = Math.max(totalMin(), 20);
-  const now = new Date();
-  const earliest = sameDay(date, now) ? now.getHours() * 60 + now.getMinutes() + CONFIG.minNoticeMin : -1;
+  const now = arParts(new Date());
+  const earliest = dateKey(date) === now.key ? now.min + CONFIG.minNoticeMin : -1;
+  const ids = state.barber === 'any' ? BARBERS.map(b => b.id) : [state.barber];
   const out = [];
-  for (let t = toMin(h[0]); t + need <= toMin(h[1]); t += CONFIG.slotStep) if (t >= earliest) out.push(fromMin(t));
+  for (let t = toMin(h[0]); t + need <= toMin(h[1]); t += CONFIG.slotStep)
+    if (t >= earliest && ids.some(id => barberCanTake(id, date, t, need))) out.push(fromMin(t));
   return out;
 }
 function dayAvailable(date) {
@@ -752,7 +876,9 @@ function renderSlots() {
     <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 mt-2">${list.map(t => `<button data-time="${t}" class="py-2.5 rounded text-sm font-medium border ${state.time === t ? 'bg-ink text-cream border-ink' : 'border-line bg-cream hover:border-bronze'}">${t}</button>`).join('')}</div></div>` : '';
   $('#slots').innerHTML = `<div class="font-semibold text-sm capitalize">${longDate(state.date)}</div>` +
     (slots.length ? group('Mañana', am) + group('Tarde & noche', pm) : `<p class="text-sm text-slate mt-2">No hay horarios para este día con la duración elegida.</p>`) +
-    `<p class="text-[11px] text-slate mt-4">Los horarios son a confirmar: te respondemos por WhatsApp validando la disponibilidad.</p>`;
+    `<p class="text-[11px] text-slate mt-4">${DB.client
+      ? 'Solo mostramos horarios libres. Tu solicitud queda pendiente hasta que la confirmemos por WhatsApp.'
+      : 'Los horarios son a confirmar: te respondemos por WhatsApp validando la disponibilidad.'}</p>`;
 }
 
 function renderSummary() {
@@ -802,47 +928,82 @@ function bookingDetails() {
   };
 }
 
-function buildWhatsApp(b) {
+// Datos "oficiales" de la solicitud: los que devolvió Supabase (r) o, sin conexión, los del formulario
+function requestView(b, r) {
+  if (!r) return { services: b.svcs.map(s => s.name), barber: barberLabel(), start: b.start, end: b.end, minutes: totalMin(), total: totalPrice() };
+  return {
+    services: r.servicios.map(s => s.nombre),
+    barber: r.barbero_nombre + (r.asignado_automaticamente ? ' (asignado)' : ''),
+    start: arDate(r.inicio), end: arDate(r.fin), minutes: r.duracion_min, total: r.total_ars,
+    codigo: r.codigo, token: r.token
+  };
+}
+
+function buildWhatsApp(b, r) {
+  const v = requestView(b, r);
   const lines = [
     `¡Hola ${CONFIG.businessName}! Quiero reservar un turno:`, '',
-    `✂️ Servicio: ${b.svcs.map(s => s.name).join(' + ')}`,
-    `💈 Barbero: ${barberLabel()}`,
-    `📅 Fecha: ${longDate(b.start)}`,
-    `🕒 Hora: ${state.time} hs (${dur(totalMin())} aprox.)`,
-    `💵 Total estimado: ${money(totalPrice())} ARS`, '',
+    ...(v.codigo ? [`🧾 Solicitud: ${v.codigo} (PENDIENTE de confirmación)`] : []),
+    `✂️ Servicio: ${v.services.join(' + ')}`,
+    `💈 Barbero: ${v.barber}`,
+    `📅 Fecha: ${longDate(v.start)}`,
+    `🕒 Hora: ${fromMin(v.start.getHours() * 60 + v.start.getMinutes())} hs (${dur(v.minutes)} aprox.)`,
+    `💵 Total estimado: ${money(v.total)} ARS`, '',
     `👤 Nombre: ${b.name}`,
     `📱 WhatsApp: ${b.phone}`
   ];
   if (b.email) lines.push(`✉️ Email: ${b.email}`);
   if (b.notes) lines.push(`📝 Notas: ${b.notes}`);
-  lines.push('', '¿Me confirman disponibilidad? ¡Gracias!');
+  if (v.token) lines.push('', `Seguimiento: ${statusUrl(v.token)}`);
+  lines.push('', '¿Me confirman el turno? ¡Gracias!');
   return waLink(lines.join('\n'));
 }
 
-function buildGCal(b) {
+// Evento de Google Calendar según el estado: un PENDIENTE nunca se presenta como turno confirmado
+function buildGCal(v, estado) {
   const f = d => `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+  const confirmed = estado === 'CONFIRMADO';
   const details = [
-    `Servicio: ${b.svcs.map(s => s.name).join(' + ')}`,
-    `Barbero: ${barberLabel()}`,
-    `Duración: ${dur(totalMin())}`,
-    `Total estimado: ${money(totalPrice())} ARS (se abona en el local)`, '',
-    `Cliente: ${b.name} · ${b.phone}`,
-    b.notes ? `Notas: ${b.notes}` : '',
-    '', `Reprogramá o cancelá sin costo hasta 2 h antes por WhatsApp: https://wa.me/${CONFIG.whatsapp}`
-  ].filter((l, i, a) => l !== '' || a[i - 1] !== '').join('\n');
+    confirmed ? '✅ Turno CONFIRMADO por la barbería.' : '⏳ SOLICITUD PENDIENTE: este turno todavía NO está confirmado por la barbería. Esperá nuestra confirmación por WhatsApp.',
+    v.codigo ? `Código de solicitud: ${v.codigo}` : '', '',
+    `Servicio: ${v.services.join(' + ')}`,
+    `Barbero: ${v.barber}`,
+    `Duración: ${dur(v.minutes)}`,
+    `Total estimado: ${money(v.total)} ARS (se abona en el local)`, '',
+    v.token ? `Estado actualizado: ${statusUrl(v.token)}` : '',
+    `Reprogramá o cancelá sin costo hasta 2 h antes por WhatsApp: https://wa.me/${CONFIG.whatsapp}`
+  ].filter((l, i, a) => l !== '' || (i > 0 && a[i - 1] !== '')).join('\n');
   const p = new URLSearchParams({
     action: 'TEMPLATE',
-    text: `Turno en ${CONFIG.businessName} – ${b.svcs.map(s => s.name).join(' + ')}`,
-    dates: `${f(b.start)}/${f(b.end)}`,
+    text: confirmed
+      ? `✅ Turno confirmado – ${CONFIG.businessName} (${v.services.join(' + ')})`
+      : `⏳ PENDIENTE DE CONFIRMACIÓN – Solicitud de turno en ${CONFIG.businessName}`,
+    dates: `${f(v.start)}/${f(v.end)}`,
     ctz: CONFIG.timezone,
     details, location: CONFIG.address
   });
-  if (CONFIG.calendarGuestEmail) p.set('add', CONFIG.calendarGuestEmail);
+  // La barbería solo se invita a eventos de turnos confirmados
+  if (confirmed && CONFIG.calendarGuestEmail) p.set('add', CONFIG.calendarGuestEmail);
   return 'https://calendar.google.com/calendar/render?' + p.toString();
 }
 
+/* --- Registro de la solicitud --- */
+const ERROR_TEXT = {
+  HORARIO_NO_DISPONIBLE: 'Ese horario ya no está disponible. Elegí otro, por favor.',
+  LIMITE_PENDIENTES: 'Ya tenés 3 solicitudes pendientes. Esperá nuestra confirmación o escribinos por WhatsApp.',
+  FUERA_DE_RANGO: null, DATOS_INVALIDOS: null
+};
+let submitting = false, bookingSaved = false;
+
+function setSubmitting(on) {
+  submitting = on;
+  [$('#confirmBtn'), $('#mbBtn')].forEach(b => { b.disabled = on; b.classList.toggle('opacity-60', on); });
+  if (on) { $('#confirmBtn').lastChild.textContent = 'Registrando…'; $('#mbBtn').textContent = 'Registrando…'; }
+  else { $('#confirmBtn').lastChild.textContent = 'Confirmar Reserva'; renderSummary(); }
+}
+
 let lastFocus = null;
-function confirmBooking() {
+async function confirmBooking() {
   const missing = firstMissing();
   if (missing) {
     if (missing.step === 'step4') contactValid(true);
@@ -851,22 +1012,133 @@ function confirmBooking() {
     if (missing.step === 'step4') setTimeout(() => (contactValid(false) ? null : ($('#fName').value.trim().length < 2 ? $('#fName') : $('#fPhone')).focus({ preventScroll: true })), 400);
     return;
   }
+  if (submitting) return;
   const b = bookingDetails();
-  const row = (k, v) => `<div class="flex justify-between gap-4"><dt class="text-slate">${k}</dt><dd class="text-right font-medium">${esc(v)}</dd></div>`;
-  $('#modalSummary').innerHTML = row('Servicio', b.svcs.map(s => s.name).join(' + ')) + row('Barbero', barberLabel()) +
-    row('Fecha', longDate(b.start)) + row('Hora', `${state.time} hs · ${dur(totalMin())}`) + row('Total', money(totalPrice()) + ' ARS');
-  $('#waBtn').href = buildWhatsApp(b);
-  $('#gcalBtn').href = buildGCal(b);
+  setSubmitting(true);
+  let saved = null, failed = false;
+  try {
+    await DB.ready;
+    if (DB.client) {
+      const { data, error } = await DB.client.rpc('crear_solicitud', {
+        p_servicios: [...state.services], p_barbero: state.barber,
+        p_fecha: dateKey(state.date), p_hora: state.time,
+        p_nombre: b.name, p_telefono: b.phone, p_email: b.email || null, p_notas: b.notes || null
+      });
+      if (error && error.code === 'P0001') {           // regla de negocio: no abrir WhatsApp
+        const code = error.message.split(':')[0];
+        toast(ERROR_TEXT[code] || error.message.replace(/^[A-Z_]+:\s*/, ''));
+        if (code === 'HORARIO_NO_DISPONIBLE') { state.time = null; await loadBusy(); document.getElementById('step3').scrollIntoView({ behavior: 'smooth' }); }
+        return;
+      }
+      if (error) { console.warn('crear_solicitud:', error.message); failed = true; } else saved = data;
+    } else failed = true;
+  } catch (e) {
+    console.warn(e); failed = true;
+  } finally {
+    setSubmitting(false);
+  }
+  openBookingModal(b, saved, failed);
+}
+
+function openBookingModal(b, r, offline) {
+  bookingSaved = !!r;
+  const v = requestView(b, r);
+  const row = (k, val) => `<div class="flex justify-between gap-4"><dt class="text-slate">${k}</dt><dd class="text-right font-medium">${esc(val)}</dd></div>`;
+  $('#modalSummary').innerHTML = (v.codigo ? row('Código', v.codigo) : '') + row('Servicio', v.services.join(' + ')) + row('Barbero', v.barber) +
+    row('Fecha', longDate(v.start)) + row('Hora', `${fromMin(v.start.getHours() * 60 + v.start.getMinutes())} hs · ${dur(v.minutes)}`) + row('Total', money(v.total) + ' ARS');
+  $('#modalEyebrow').textContent = r ? 'Solicitud registrada' : 'Último paso';
+  $('#modalTitle').textContent = r ? 'Ahora envianos tu pedido' : 'Enviá tu pedido de turno';
+  $('#modalStatus').classList.toggle('hidden', !r); $('#modalStatus').classList.toggle('inline-flex', !!r);
+  const notice = $('#modalNotice');
+  notice.classList.toggle('hidden', !r && !offline);
+  notice.className = `text-xs rounded p-3 mb-4 ${r ? 'bg-tint text-bronze-dark' : 'bg-red-50 text-red-800'} ${!r && !offline ? 'hidden' : ''}`;
+  notice.textContent = r
+    ? `Tu turno todavía NO está confirmado. Te guardamos el horario hasta el ${holdUntil(r.expira_en)} mientras lo confirmamos: envianos el pedido por WhatsApp. Si no se confirma antes, la solicitud vence y el horario se libera.`
+    : 'No pudimos registrar la solicitud en nuestro sistema en este momento. Podés enviarla igual por WhatsApp y la cargamos nosotros, o reintentar.';
+  $('#waBtn').href = buildWhatsApp(b, r);
+  $('#trackItem').classList.toggle('hidden', !r);
+  if (r) $('#trackBtn').href = '#turno/' + r.token;
+  $('#gcalBtn').href = buildGCal(v, 'PENDIENTE');
+  $('#retryBtn').classList.toggle('hidden', !offline);
+  $('#modalCloseBtn').textContent = r ? 'Cerrar' : 'Volver y editar';
   lastFocus = document.activeElement;
   $('#modal').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
   $('#waBtn').focus();
 }
-function closeModal() { $('#modal').classList.add('hidden'); document.body.style.overflow = ''; lastFocus && lastFocus.focus(); }
+
+function closeModal() {
+  $('#modal').classList.add('hidden'); document.body.style.overflow = ''; lastFocus && lastFocus.focus();
+  if (bookingSaved) {          // ya quedó registrada: limpiar la selección para no duplicarla
+    bookingSaved = false; state.time = null; state.date = null;
+    renderCalendar(); renderSummary(); loadBusy();
+  }
+}
+
+/* --- Seguimiento del turno (#turno/<token>) --- */
+const ESTADO_UI = {
+  PENDIENTE:  { icon: 'hourglass_top', cls: 'bg-bronze-soft/60 text-bronze-dark', label: 'Pendiente de confirmación', text: 'Recibimos tu solicitud. Todavía no está confirmada: te avisamos por WhatsApp.' },
+  CONFIRMADO: { icon: 'check_circle',  cls: 'bg-emerald-100 text-emerald-800',     label: 'Turno confirmado',          text: '¡Te esperamos! Podés agregarlo a tu Google Calendar.' },
+  RECHAZADO:  { icon: 'cancel',        cls: 'bg-red-100 text-red-800',             label: 'No pudimos confirmarlo',    text: 'Ese horario no pudo confirmarse. Elegí otro y te lo reservamos.' },
+  CANCELADO:  { icon: 'event_busy',    cls: 'bg-cream text-muted border border-line', label: 'Turno cancelado',       text: 'Esta solicitud fue cancelada.' }
+};
+let currentTurno = null;
+
+async function loadTurno(token) {
+  const box = $('#turnoBox');
+  box.innerHTML = `<p class="text-sm text-slate">Buscando tu solicitud…</p>`;
+  await DB.ready;
+  const wa = `<a data-wa-general target="_blank" rel="noopener" href="${waLink(`¡Hola ${CONFIG.businessName}! Quería consultar por mi turno.`)}" class="inline-flex items-center gap-2 px-5 py-3 rounded bg-ink text-cream text-sm font-semibold mt-4"><span class="material-symbols-outlined text-[18px]">chat</span>Consultar por WhatsApp</a>`;
+  if (!DB.client) { box.innerHTML = `<div class="bg-white border border-line rounded-lg p-6 text-sm text-muted">El seguimiento online no está disponible en este momento.${wa}</div>`; return; }
+  if (!/^[0-9a-f-]{36}$/i.test(token || '')) { box.innerHTML = `<div class="bg-white border border-line rounded-lg p-6 text-sm text-muted">El enlace de seguimiento no es válido.${wa}</div>`; return; }
+  const { data, error } = await DB.client.rpc('consultar_solicitud', { p_token: token });
+  if (error || !data) { box.innerHTML = `<div class="bg-white border border-line rounded-lg p-6 text-sm text-muted">${error ? 'No pudimos consultar la solicitud. Probá de nuevo en unos minutos.' : 'No encontramos esa solicitud.'}${wa}</div>`; return; }
+  currentTurno = { ...data, token };
+  renderTurno();
+}
+
+function renderTurno() {
+  const t = currentTurno, ui = ESTADO_UI[t.estado];
+  const v = requestView(null, { ...t, servicios: t.servicios });
+  const row = (k, val) => `<div class="flex justify-between gap-4 py-2 border-b border-line last:border-0"><dt class="text-slate">${k}</dt><dd class="text-right font-medium">${esc(val)}</dd></div>`;
+  const btn = (attrs, icon, label, primary) => `<a ${attrs} class="inline-flex items-center gap-2 px-5 py-3 rounded text-sm font-semibold ${primary ? 'bg-ink text-cream hover:bg-ink2' : 'border border-ink hover:bg-cream'}"><span class="material-symbols-outlined text-[18px]">${icon}</span>${label}</a>`;
+  const actions = [];
+  if (t.estado === 'CONFIRMADO') actions.push(btn(`href="${buildGCal(v, 'CONFIRMADO')}" target="_blank" rel="noopener"`, 'event_available', 'Agregar a Google Calendar', true));
+  if (t.estado === 'PENDIENTE') actions.push(btn(`href="${buildGCal(v, 'PENDIENTE')}" target="_blank" rel="noopener"`, 'event', 'Agendar como pendiente'));
+  if (t.estado === 'RECHAZADO' || t.estado === 'CANCELADO') actions.push(btn('href="#reservar"', 'calendar_month', 'Pedir otro turno', true));
+  actions.push(btn(`href="${waLink(`¡Hola ${CONFIG.businessName}! Consulto por mi solicitud ${t.codigo}.`)}" target="_blank" rel="noopener"`, 'chat', 'Consultar por WhatsApp'));
+  $('#turnoBox').innerHTML = `
+    <div class="bg-white border border-line rounded-lg shadow-soft overflow-hidden">
+      <div class="h-1 bg-gradient-to-r from-bronze to-bronze-soft"></div>
+      <div class="p-6 md:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="inline-flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded ${ui.cls}"><span class="material-symbols-outlined text-[18px]">${ui.icon}</span>${ui.label}</span>
+          <span class="text-xs text-slate">Código <b class="text-ink">${esc(t.codigo)}</b></span>
+        </div>
+        <p class="text-sm text-muted mt-4">${ui.text}</p>
+        ${t.estado === 'PENDIENTE' && t.expira_en ? `<p class="text-xs bg-tint text-bronze-dark rounded p-3 mt-3">Te guardamos el horario hasta el ${holdUntil(t.expira_en)}. Si no lo confirmamos antes, la solicitud vence y el horario se libera.</p>` : ''}
+        ${t.motivo && t.estado !== 'CONFIRMADO' ? `<p class="text-sm mt-2"><span class="text-slate">Motivo:</span> ${esc(t.motivo)}</p>` : ''}
+        <dl class="text-sm mt-6">${row('Servicio', v.services.join(' + '))}${row('Barbero', v.barber)}${row('Fecha', longDate(v.start))}${row('Hora', `${fromMin(v.start.getHours() * 60 + v.start.getMinutes())} hs · ${dur(v.minutes)}`)}${row('Total estimado', money(v.total) + ' ARS')}${row('Sede', 'Av. Argentina 450 · Neuquén Centro')}</dl>
+        <div class="flex flex-wrap gap-3 mt-6">${actions.join('')}</div>
+        <div class="flex flex-wrap justify-between gap-3 mt-6 pt-4 border-t border-line text-sm">
+          <button data-turno-refresh class="inline-flex items-center gap-1 text-slate hover:text-ink"><span class="material-symbols-outlined text-[18px]">refresh</span>Actualizar estado</button>
+          ${t.cancelable ? `<button data-turno-cancel class="inline-flex items-center gap-1 text-red-700 hover:text-red-900"><span class="material-symbols-outlined text-[18px]">event_busy</span>Cancelar ${t.estado === 'CONFIRMADO' ? 'turno' : 'solicitud'}</button>` : ''}
+        </div>
+      </div>
+    </div>`;
+}
+
+async function cancelTurno() {
+  if (!currentTurno || !confirm(`¿Seguro que querés cancelar la solicitud ${currentTurno.codigo}?`)) return;
+  const { data, error } = await DB.client.rpc('cancelar_solicitud', { p_token: currentTurno.token });
+  if (error) { toast(error.message.replace(/^[A-Z_]+:\s*/, '')); return; }
+  currentTurno = { ...data, token: currentTurno.token };
+  renderTurno(); toast('Tu solicitud fue cancelada.', 'ok'); loadBusy();
+}
 
 /* --- Eventos --- */
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-book-service],[data-book-barber],[data-toggle-service],[data-pick-barber],[data-bcat],[data-day],[data-time],[data-staff],[data-close]');
+  const t = e.target.closest('[data-book-service],[data-book-barber],[data-toggle-service],[data-pick-barber],[data-bcat],[data-day],[data-time],[data-staff],[data-close],[data-turno-refresh],[data-turno-cancel]');
   if (!t) return;
   const d = t.dataset;
   if (d.bookService) { state.services.add(d.bookService); state.cat = 'all'; refreshBooking(); go('reservar/step2'); }
@@ -878,11 +1150,14 @@ document.addEventListener('click', e => {
   else if (d.time) { state.time = d.time; renderSlots(); renderSummary(); if (innerWidth < 1024) document.getElementById('step4').scrollIntoView({ behavior: 'smooth' }); }
   else if (d.staff) { staffFilter = d.staff; renderStaff(); }
   else if (t.hasAttribute('data-close')) closeModal();
+  else if (t.hasAttribute('data-turno-refresh')) loadTurno(currentTurno && currentTurno.token);
+  else if (t.hasAttribute('data-turno-cancel')) cancelTurno();
 });
 $('#calPrev').addEventListener('click', () => { calMonth.setMonth(calMonth.getMonth() - 1); renderCalendar(); });
 $('#calNext').addEventListener('click', () => { calMonth.setMonth(calMonth.getMonth() + 1); renderCalendar(); });
 $('#confirmBtn').addEventListener('click', confirmBooking);
 $('#mbBtn').addEventListener('click', confirmBooking);
+$('#retryBtn').addEventListener('click', () => { bookingSaved = false; $('#modal').classList.add('hidden'); document.body.style.overflow = ''; confirmBooking(); });
 $('#contactForm').addEventListener('input', e => { if (e.target.classList.contains('err')) contactValid(true); renderSummary(); });
 $('#contactForm').addEventListener('submit', e => { e.preventDefault(); confirmBooking(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#modal').classList.contains('hidden')) closeModal(); });
@@ -900,6 +1175,7 @@ $$('[data-img]').forEach(el => el.src = img(IMG[el.dataset.img]));
 $$('[data-wa-general]').forEach(a => a.href = waLink(`¡Hola ${CONFIG.businessName}! Quería hacer una consulta.`));
 $$('[data-phone-display]').forEach(e => e.textContent = CONFIG.phoneDisplay);
 $('#year').textContent = new Date().getFullYear();
+DB.ready = initSupabase().then(async c => { DB.client = c; if (c) { await loadCatalog(); await loadBusy(); } return c; });
 buildNav(); renderHome(); renderServices(); renderStaff(); renderLocation(); renderOpenBadge(); refreshBooking(); route();
 </script>
 </body>
