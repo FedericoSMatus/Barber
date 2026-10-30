@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Patagonia Grooming Co. · Barbería &amp; Club · Neuquén</title>
+<meta name="description" content="Barbería en el centro de Neuquén. Cortes, barba a navaja y rituales de aseo masculino. Reservá tu turno online por WhatsApp y Google Calendar."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300..800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        ink: '#1F2326', ink2: '#2F353A', bronze: '#B8864E', 'bronze-dark': '#805522',
+        'bronze-soft': '#FEC486', cream: '#F8F6F2', card: '#FFFFFF', line: '#E5E0D8',
+        field: '#D8D2C7', slate: '#6E757C', muted: '#44474A', tint: '#FAF5EE', wa: '#25D366'
+      },
+      fontFamily: { serif: ['"Playfair Display"', 'serif'], sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+      boxShadow: { soft: '0 4px 20px -2px rgba(31,35,38,.06), 0 2px 6px -1px rgba(31,35,38,.04)' },
+      maxWidth: { site: '1200px' }
+    }
+  }
+}
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400; vertical-align: middle; line-height: 1; }
+  .page { display: none; }
+  .page.active { display: block; animation: fade .35s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #805522; }
+  .sel { border-color: #B8864E !important; border-width: 1.5px !important; background: #FAF5EE !important; }
+  .field { width: 100%; border: 1px solid #D8D2C7; background: #fff; border-radius: 4px; padding: .7rem .85rem; font-size: 14px; outline: none; }
+  .field:focus { border-color: #B8864E; box-shadow: 0 0 0 1px #B8864E; }
+  .field.err { border-color: #ba1a1a; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
+  @media (prefers-reduced-motion: reduce) { .page.active { animation: none; } html { scroll-behavior: auto; } }
+</style>
+</head>
+<body class="bg-cream text-ink antialiased">
+
+<!-- ============ HEADER ============ -->
+<header class="fixed top-0 inset-x-0 z-50 bg-cream/90 backdrop-blur-xl border-b border-line/60">
+  <div class="h-20 max-w-site mx-auto px-4 md:px-6 flex items-center justify-between gap-4">
+    <a href="#inicio" class="flex items-center gap-3 min-w-0">
+      <img data-img="logo" alt="Logo Patagonia Grooming Co." class="h-8 w-8 object-contain"/>
+      <div class="flex flex-col leading-none min-w-0">
+        <span class="font-semibold tracking-tight text-[17px] truncate">Patagonia Grooming Co.</span>
+        <span class="text-[11px] font-semibold uppercase tracking-wider text-bronze-dark mt-1">Barbería &amp; Club · Neuquén</span>
+      </div>
+    </a>
+    <nav class="hidden xl:flex items-center gap-1" id="desktopNav"></nav>
+    <div class="flex items-center gap-2">
+      <a data-wa-general target="_blank" rel="noopener" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded bg-white border border-line hover:border-bronze transition-colors text-xs font-semibold uppercase tracking-wider">
+        <span class="material-symbols-outlined text-[18px] text-bronze">chat</span>WhatsApp
+      </a>
+      <a href="#reservar" class="hidden sm:inline-flex items-center px-4 py-2.5 rounded bg-ink text-cream hover:bg-ink2 transition-colors text-sm font-semibold">Reservar Turno</a>
+      <button id="menuBtn" class="xl:hidden w-10 h-10 grid place-items-center rounded hover:bg-white" aria-label="Abrir menú" aria-expanded="false">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+    </div>
+  </div>
+  <nav id="mobileNav" class="xl:hidden hidden border-t border-line bg-cream px-4 pb-4 pt-2 flex-col gap-1"></nav>
+</header>
+
+<main class="pt-20 min-h-screen">
+
+<!-- ============ INICIO ============ -->
+<section class="page" data-page="inicio">
+  <div class="max-w-site mx-auto px-4 md:px-6 py-12 md:py-20 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+    <div>
+      <span id="openBadge" class="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-white border border-line text-xs font-semibold">
+        <span class="w-2 h-2 rounded-full bg-bronze"></span><span>Abierto de Lun a Sáb · Centro Neuquén</span>
+      </span>
+      <h1 class="font-serif font-semibold text-[38px] leading-[44px] md:text-[56px] md:leading-[64px] tracking-tight mt-6">El arte del cuidado masculino en el corazón de Neuquén.</h1>
+      <p class="text-muted text-base leading-relaxed mt-5 max-w-xl">Un santuario de precisión, afeitado tradicional a navaja y café de especialidad tostado localmente mientras disfrutás de un espacio concebido para desconectar en el Alto Valle.</p>
+      <div class="flex flex-wrap gap-3 mt-8">
+        <a href="#reservar" class="inline-flex items-center gap-2 px-6 py-3.5 rounded bg-ink text-cream hover:bg-ink2 font-semibold text-sm">Reservar Turno Online <span class="material-symbols-outlined text-[18px]">calendar_month</span></a>
+        <a href="#servicios" class="inline-flex items-center gap-2 px-6 py-3.5 rounded border border-ink hover:bg-white font-semibold text-sm">Ver Servicios &amp; Precios <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
+      </div>
+      <div class="grid grid-cols-3 gap-3 mt-10 max-w-lg">
+        <div class="bg-white border border-line rounded-lg p-4"><div class="text-xl font-bold">+4.500</div><div class="text-xs text-slate mt-1">Clientes satisfechos</div></div>
+        <div class="bg-white border border-line rounded-lg p-4"><div class="text-xl font-bold flex items-center gap-1">4.9 <span class="material-symbols-outlined text-bronze text-[18px]" style="font-variation-settings:'FILL' 1">star</span></div><div class="text-xs text-slate mt-1">En Google Maps</div></div>
+        <div class="bg-white border border-line rounded-lg p-4"><div class="text-xl font-bold" data-barber-count>4</div><div class="text-xs text-slate mt-1">Barberos Master</div></div>
+      </div>
+    </div>
+    <div class="relative">
+      <img data-img="hero" alt="Barbero perfilando una barba en un sillón de cuero, con luz cálida" class="w-full aspect-[4/5] lg:aspect-[4/4.6] object-cover rounded-lg"/>
+      <div class="absolute left-4 right-4 sm:left-auto sm:-left-6 bottom-6 sm:w-72 bg-white rounded-lg shadow-soft border border-line p-4 flex gap-3 items-start">
+        <span class="material-symbols-outlined text-bronze">verified</span>
+        <div><div class="font-semibold text-sm">Puntualidad Absoluta</div><div class="text-xs text-slate mt-0.5">Tu turno comienza en el minuto pactado. Café o single malt de cortesía incluido.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white border-y border-line">
+    <div class="max-w-site mx-auto px-4 md:px-6 py-16 md:py-20">
+      <div class="grid md:grid-cols-2 gap-6 items-end">
+        <div><div class="eyebrow">Nuestra Filosofía</div><h2 class="font-serif text-[28px] leading-[34px] md:text-[36px] md:leading-[44px] mt-3">Experiencia Patagonia: Cuidado con identidad y sin apuros.</h2></div>
+        <p class="text-muted md:text-right">Reinventamos la barbería patagónica combinando técnicas de corte de precisión internacional con la calidez y el sosiego del sur.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
+        <div class="bg-cream rounded-lg p-6"><span class="material-symbols-outlined text-bronze">schedule</span><h3 class="font-semibold mt-4">Atención Puntual</h3><p class="text-sm text-muted mt-2">Respetamos tu tiempo como el nuestro. Turnos agendados para evitar esperas innecesarias.</p></div>
+        <div class="bg-cream rounded-lg p-6"><span class="material-symbols-outlined text-bronze">air</span><h3 class="font-semibold mt-4">Toalla Caliente &amp; Ozono</h3><p class="text-sm text-muted mt-2">Vapor de ozono y toallas infusionadas con aceites de pino y eucalipto para relajar el rostro.</p></div>
+        <div class="bg-cream rounded-lg p-6"><span class="material-symbols-outlined text-bronze">spa</span><h3 class="font-semibold mt-4">Productos Premium</h3><p class="text-sm text-muted mt-2">Bálsamos botánicos, ceras mates y pomadas con extractos autóctonos para piel y cabello.</p></div>
+        <div class="bg-cream rounded-lg p-6"><span class="material-symbols-outlined text-bronze">local_cafe</span><h3 class="font-semibold mt-4">Café &amp; Barra Selecta</h3><p class="text-sm text-muted mt-2">Espresso de origen, vermú patagónico o whisky escocés mientras suena jazz en vinilo.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-site mx-auto px-4 md:px-6 py-16 md:py-20">
+    <div class="text-center max-w-2xl mx-auto">
+      <div class="eyebrow">Carta de Estilo</div>
+      <h2 class="font-serif text-[28px] leading-[34px] md:text-[36px] md:leading-[44px] mt-3">Nuestros Rituales Más Solicitados</h2>
+      <p class="text-muted mt-3 text-sm">Tarifas transparentes en Pesos Argentinos ($ ARS). Sin sorpresas ni recargos ocultos.</p>
+    </div>
+    <div id="homeFeatured" class="grid md:grid-cols-3 gap-5 mt-10 items-stretch"></div>
+  </div>
+
+  <div class="bg-white border-y border-line">
+    <div class="max-w-site mx-auto px-4 md:px-6 py-16 md:py-20">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div><div class="eyebrow">El Equipo</div><h2 class="font-serif text-[28px] leading-[34px] md:text-[36px] md:leading-[44px] mt-3">Nuestros Barberos Master</h2></div>
+        <a href="#profesionales" class="text-sm font-semibold inline-flex items-center gap-1 hover:text-bronze-dark">Conocé al equipo <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
+      </div>
+      <div id="homeBarbers" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10"></div>
+    </div>
+  </div>
+
+  <div class="max-w-site mx-auto px-4 md:px-6 py-16 md:py-20">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div><div class="eyebrow">Comunidad Neuquina</div><h2 class="font-serif text-[28px] leading-[34px] md:text-[36px] md:leading-[44px] mt-3">Lo que dicen nuestros clientes</h2></div>
+      <div class="flex items-center gap-2 font-bold">4.9 / 5.0 <span class="text-bronze tracking-tight">★★★★★</span></div>
+    </div>
+    <div class="grid md:grid-cols-3 gap-5 mt-10">
+      <figure class="bg-white border border-line rounded-lg p-6 flex flex-col"><div class="text-bronze">★★★★★</div><blockquote class="text-sm text-muted mt-3 flex-1">“Trabajo en el centro de Neuquén y la puntualidad para mí es innegociable. Con Facundo el turno arranca a la hora exacta. El ritual de toalla caliente después de una semana pesada es imbatible.”</blockquote><figcaption class="mt-5 flex items-center gap-3"><span class="w-9 h-9 rounded-full bg-cream grid place-items-center text-xs font-bold">FA</span><span><span class="block text-sm font-semibold">Facundo Álvarez</span><span class="block text-xs text-slate">Cliente desde 2022 · Santa Genoveva</span></span></figcaption></figure>
+      <figure class="bg-white border border-line rounded-lg p-6 flex flex-col"><div class="text-bronze">★★★★★</div><blockquote class="text-sm text-muted mt-3 flex-1">“El Combo Patagónico vale cada peso. La ambientación, la música suave y el café de cortesía te hacen sentir en un club exclusivo. Es el mejor lugar de todo el Alto Valle.”</blockquote><figcaption class="mt-5 flex items-center gap-3"><span class="w-9 h-9 rounded-full bg-cream grid place-items-center text-xs font-bold">MG</span><span><span class="block text-sm font-semibold">Mariano Gutierrez</span><span class="block text-xs text-slate">Cliente habitual · Cipolletti / Nqn</span></span></figcaption></figure>
+      <figure class="bg-white border border-line rounded-lg p-6 flex flex-col"><div class="text-bronze">★★★★★</div><blockquote class="text-sm text-muted mt-3 flex-1">“Nico entendió exactamente el fade que buscaba. Compré también el aceite orgánico que producen acá y el cambio en la piel fue notable. 10 de 10.”</blockquote><figcaption class="mt-5 flex items-center gap-3"><span class="w-9 h-9 rounded-full bg-cream grid place-items-center text-xs font-bold">EP</span><span><span class="block text-sm font-semibold">Esteban Peralta</span><span class="block text-xs text-slate">Cliente mensual · Neuquén Capital</span></span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="max-w-site mx-auto px-4 md:px-6 pb-16 md:pb-20">
+    <div class="bg-ink text-cream rounded-lg p-8 md:p-12 grid md:grid-cols-[1fr_auto] gap-6 items-center">
+      <div><div class="text-xs font-semibold uppercase tracking-widest text-bronze-soft">Reserva Inmediata</div><h2 class="font-serif text-[28px] leading-[34px] md:text-[36px] md:leading-[44px] mt-3">Confirmá tu turno en 4 pasos</h2><p class="text-cream/70 mt-2 text-sm">Elegí servicio, barbero y horario. Lo enviás por WhatsApp y lo guardás en tu Google Calendar.</p></div>
+      <div class="flex flex-wrap gap-3">
+        <a href="#reservar" class="inline-flex items-center gap-2 px-6 py-3.5 rounded bg-bronze text-white hover:bg-bronze-dark font-semibold text-sm"><span class="material-symbols-outlined text-[18px]">calendar_month</span>Reservar ahora</a>
+        <a href="#ubicacion" class="inline-flex items-center gap-2 px-6 py-3.5 rounded border border-cream/30 hover:bg-white/10 font-semibold text-sm"><span class="material-symbols-outlined text-[18px]">location_on</span>Cómo llegar</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICIOS ============ -->
+<section class="page" data-page="servicios">
+  <div class="max-w-site mx-auto px-4 md:px-6 pt-12 md:pt-16 pb-8">
+    <div class="eyebrow flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">verified</span>Carta Oficial de Tarifas · Neuquén</div>
+    <div class="grid lg:grid-cols-[1fr_auto] gap-6 items-end mt-3">
+      <div><h1 class="font-serif text-[34px] leading-[40px] md:text-[44px] md:leading-[52px]">Servicios &amp; Experiencias de Barbería</h1>
+      <p class="text-muted mt-3 max-w-2xl">Valores en Pesos Argentinos ($ ARS). Sin cargos imprevistos; incluye cortesía de café de especialidad o whisky patagónico en nuestra sala club.</p></div>
+      <div id="catChips" class="flex flex-wrap gap-2"></div>
+    </div>
+  </div>
+  <div class="bg-bronze-soft/40 border-y border-bronze-soft">
+    <div class="max-w-site mx-auto px-4 md:px-6 py-3 flex flex-col sm:flex-row justify-between gap-1 text-sm">
+      <span class="font-semibold flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">payments</span>10% de descuento abonando en efectivo en el local</span>
+      <span class="text-bronze-dark">Mercado Pago, transferencias y tarjetas sin recargo.</span>
+    </div>
+  </div>
+  <div id="serviceCatalog" class="max-w-site mx-auto px-4 md:px-6 py-12 space-y-16"></div>
+
+  <div class="max-w-site mx-auto px-4 md:px-6 pb-16 space-y-12">
+    <div class="bg-white border border-line rounded-lg p-6 md:p-10 grid lg:grid-cols-2 gap-8 items-center">
+      <div><div class="eyebrow flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">account_balance_wallet</span>Compromiso de Honestidad Tarifaria</div>
+      <h2 class="font-serif text-[26px] leading-[32px] mt-3">Información Clara de Pagos &amp; Cancelaciones</h2>
+      <p class="text-muted text-sm mt-3">Aceptamos todas las opciones en moneda nacional sin comisiones ocultas. Podés reprogramar o cancelar tu turno sin costo avisando con hasta 2 horas de anticipación.</p></div>
+      <div class="grid grid-cols-2 gap-3 text-sm">
+        <div class="border border-line rounded p-4"><div class="font-bold">10% OFF</div><div class="text-xs text-slate">Efectivo ($ ARS)</div></div>
+        <div class="border border-line rounded p-4"><div class="font-semibold">Mercado Pago</div><div class="text-xs text-slate">QR &amp; transferencias</div></div>
+        <div class="border border-line rounded p-4"><div class="font-semibold">Tarjetas Débito</div><div class="text-xs text-slate">Visa &amp; Mastercard</div></div>
+        <div class="border border-line rounded p-4"><div class="font-semibold">Transferencia</div><div class="text-xs text-slate">Alias o CBU directo</div></div>
+      </div>
+    </div>
+    <div>
+      <h2 class="font-serif text-[26px] leading-[32px]">Preguntas Frecuentes</h2>
+      <div class="grid md:grid-cols-2 gap-4 mt-6">
+        <details class="bg-white border border-line rounded-lg p-5 group" open><summary class="font-semibold cursor-pointer list-none flex justify-between gap-4">¿Se puede pagar con Mercado Pago en el local?<span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span></summary><p class="text-sm text-muted mt-3">Sí, hay código QR en cada estación y en caja para pagar en segundos con dinero en cuenta o tarjeta vinculada.</p></details>
+        <details class="bg-white border border-line rounded-lg p-5 group" open><summary class="font-semibold cursor-pointer list-none flex justify-between gap-4">¿Qué pasa si llego unos minutos tarde?<span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span></summary><p class="text-sm text-muted mt-3">Tenemos una tolerancia de 10 minutos para que el siguiente cliente también sea atendido puntualmente.</p></details>
+        <details class="bg-white border border-line rounded-lg p-5 group"><summary class="font-semibold cursor-pointer list-none flex justify-between gap-4">¿Cómo se confirma mi turno?<span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span></summary><p class="text-sm text-muted mt-3">Enviás el pedido por WhatsApp desde la sección Reservar y te respondemos confirmando el horario. También podés guardarlo en tu Google Calendar con un clic.</p></details>
+        <details class="bg-white border border-line rounded-lg p-5 group"><summary class="font-semibold cursor-pointer list-none flex justify-between gap-4">¿Puedo combinar varios servicios?<span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span></summary><p class="text-sm text-muted mt-3">Sí. En el turnero podés sumar más de un servicio y calculamos la duración y el total automáticamente.</p></details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROFESIONALES ============ -->
+<section class="page" data-page="profesionales">
+  <div class="max-w-site mx-auto px-4 md:px-6 pt-12 md:pt-16">
+    <div class="eyebrow">Maestros Artesanos · Neuquén</div>
+    <div class="grid lg:grid-cols-[1fr_auto] gap-6 items-end mt-3">
+      <div><h1 class="font-serif text-[34px] leading-[40px] md:text-[44px] md:leading-[52px]">El equipo detrás de cada detalle y corte perfecto.</h1>
+      <p class="text-muted mt-3 max-w-2xl">La barbería como oficio de precisión. Combinamos el rigor de la vieja escuela italiana con técnicas de visagismo contemporáneo en pleno centro de Neuquén Capital.</p></div>
+      <div class="grid grid-cols-3 gap-4 bg-white border border-line rounded-lg p-4 text-center">
+        <div><div class="font-bold text-lg">+12.000</div><div class="text-[11px] text-slate uppercase tracking-wide">Cortes</div></div>
+        <div><div class="font-bold text-lg">4.96/5</div><div class="text-[11px] text-slate uppercase tracking-wide">Satisfacción</div></div>
+        <div><div class="font-bold text-lg">100%</div><div class="text-[11px] text-slate uppercase tracking-wide">A medida</div></div>
+      </div>
+    </div>
+    <div class="mt-8 flex gap-2 overflow-x-auto no-scrollbar" id="staffFilters"></div>
+  </div>
+  <div id="staffList" class="max-w-site mx-auto px-4 md:px-6 py-8 space-y-6"></div>
+  <div class="max-w-site mx-auto px-4 md:px-6 pb-16">
+    <div class="bg-white border border-line rounded-lg p-6 md:p-10 grid md:grid-cols-[1fr_auto] gap-6 items-center">
+      <div><div class="eyebrow">Garantía Patagonia Grooming</div><h2 class="font-serif text-[26px] leading-[32px] mt-2">¿Primera vez con nosotros? Te asignamos el especialista ideal.</h2><p class="text-sm text-muted mt-2">Si no tenés preferencia, elegí “Cualquier barbero disponible” y el profesional más indicado para tu tipo de cabello se ocupará de tu cita.</p></div>
+      <div class="flex flex-wrap gap-3"><a href="#servicios" class="px-5 py-3 rounded border border-ink text-sm font-semibold hover:bg-cream">Ver Carta de Precios</a><button data-book-barber="any" class="px-5 py-3 rounded bg-bronze text-white text-sm font-semibold hover:bg-bronze-dark">Primer Turno Disponible</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESERVAR ============ -->
+<section class="page" data-page="reservar">
+  <div class="bg-ink text-cream">
+    <div class="max-w-site mx-auto px-4 md:px-6 py-10 md:py-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div><div class="text-xs font-semibold uppercase tracking-widest text-bronze-soft flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">verified</span>Turnos Online</div>
+      <h1 class="font-serif text-[32px] leading-[38px] md:text-[44px] md:leading-[52px] mt-2">Reservá tu Ritual de Barbería</h1>
+      <p class="text-cream/70 mt-2 max-w-2xl text-sm md:text-base">Elegí servicio, barbero y horario. Enviá el pedido por WhatsApp y guardalo en tu Google Calendar.</p></div>
+      <div class="inline-flex items-center gap-2 text-xs bg-white/10 rounded px-3 py-2 self-start md:self-auto"><span class="material-symbols-outlined text-[16px] text-bronze-soft">location_on</span>Av. Argentina 450 · Neuquén</div>
+    </div>
+  </div>
+
+  <div class="max-w-site mx-auto px-4 md:px-6 py-8 md:py-10 grid lg:grid-cols-[1fr_340px] gap-8 items-start pb-32 lg:pb-16">
+    <div class="space-y-12 min-w-0">
+      <ol id="stepper" class="flex gap-2 overflow-x-auto no-scrollbar text-xs font-semibold uppercase tracking-wider"></ol>
+
+      <!-- Paso 1 -->
+      <div id="step1" class="scroll-mt-28">
+        <div class="eyebrow">Paso 01</div>
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mt-1">
+          <h2 class="font-serif text-[26px] leading-[32px]">Seleccioná tu servicio</h2>
+          <div id="bookCatFilter" class="flex gap-1 bg-white border border-line rounded p-1 overflow-x-auto no-scrollbar"></div>
+        </div>
+        <p class="text-sm text-slate mt-1">Podés sumar más de uno; calculamos duración y total.</p>
+        <div id="bookServices" class="grid sm:grid-cols-2 gap-4 mt-5"></div>
+      </div>
+
+      <!-- Paso 2 -->
+      <div id="step2" class="scroll-mt-28">
+        <div class="eyebrow">Paso 02</div>
+        <h2 class="font-serif text-[26px] leading-[32px] mt-1">Elegí a tu profesional</h2>
+        <p class="text-sm text-slate mt-1">Cada barbero tiene sus propios días y horarios de atención.</p>
+        <div id="bookBarbers" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-5"></div>
+      </div>
+
+      <!-- Paso 3 -->
+      <div id="step3" class="scroll-mt-28">
+        <div class="eyebrow">Paso 03</div>
+        <h2 class="font-serif text-[26px] leading-[32px] mt-1">Fecha y horario</h2>
+        <p class="text-sm text-slate mt-1">Lunes a sábados. Domingos cerrado.</p>
+        <div class="bg-white border border-line rounded-lg p-4 md:p-6 mt-5">
+          <div class="flex items-center justify-between">
+            <div class="font-semibold flex items-center gap-2"><span class="material-symbols-outlined text-bronze">calendar_month</span><span id="calTitle"></span></div>
+            <div class="flex gap-1">
+              <button id="calPrev" class="w-9 h-9 grid place-items-center rounded border border-line hover:border-bronze disabled:opacity-30 disabled:hover:border-line" aria-label="Mes anterior"><span class="material-symbols-outlined">chevron_left</span></button>
+              <button id="calNext" class="w-9 h-9 grid place-items-center rounded border border-line hover:border-bronze disabled:opacity-30 disabled:hover:border-line" aria-label="Mes siguiente"><span class="material-symbols-outlined">chevron_right</span></button>
+            </div>
+          </div>
+          <div class="grid grid-cols-7 gap-1 mt-4 text-center text-[11px] font-semibold uppercase tracking-wider text-slate">
+            <div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div class="text-bronze-dark">Sáb</div><div>Dom</div>
+          </div>
+          <div id="calGrid" class="grid grid-cols-7 gap-1 mt-2"></div>
+          <div id="slots" class="mt-6"></div>
+        </div>
+      </div>
+
+      <!-- Paso 4 -->
+      <div id="step4" class="scroll-mt-28">
+        <div class="eyebrow">Paso 04</div>
+        <h2 class="font-serif text-[26px] leading-[32px] mt-1">Tus datos de contacto</h2>
+        <p class="text-sm text-slate mt-1">Los usamos para armar tu mensaje de WhatsApp y el evento de calendario.</p>
+        <form id="contactForm" class="bg-white border border-line rounded-lg p-4 md:p-6 mt-5 grid md:grid-cols-2 gap-4" novalidate>
+          <label class="block"><span class="text-[11px] font-semibold uppercase tracking-wider">Nombre y apellido *</span><input id="fName" class="field mt-1.5" autocomplete="name" placeholder="Martín Rodríguez"/></label>
+          <label class="block"><span class="text-[11px] font-semibold uppercase tracking-wider">WhatsApp *</span><input id="fPhone" class="field mt-1.5" type="tel" inputmode="tel" autocomplete="tel" placeholder="299 482 9100"/><span class="text-[11px] text-slate">Con código de área, sin 0 ni 15.</span></label>
+          <label class="block md:col-span-2"><span class="text-[11px] font-semibold uppercase tracking-wider">Correo electrónico (opcional)</span><input id="fEmail" class="field mt-1.5" type="email" autocomplete="email" placeholder="tu@email.com"/></label>
+          <label class="block md:col-span-2"><span class="text-[11px] font-semibold uppercase tracking-wider">Notas o preferencias</span><textarea id="fNotes" rows="3" class="field mt-1.5" placeholder="Ej. Primera vez, prefiero afeitado suave porque tengo piel sensible. Café sin azúcar."></textarea></label>
+        </form>
+      </div>
+    </div>
+
+    <!-- Resumen -->
+    <aside class="lg:sticky lg:top-28 space-y-4" id="summaryBox">
+      <div class="bg-white border border-line rounded-lg shadow-soft overflow-hidden">
+        <div class="h-1 bg-gradient-to-r from-bronze to-bronze-soft"></div>
+        <div class="p-5">
+          <div class="flex items-center justify-between"><h3 class="font-serif text-xl">Resumen de Turno</h3><span class="text-[10px] font-bold uppercase tracking-wider bg-tint text-bronze-dark px-2 py-1 rounded">Neuquén</span></div>
+          <dl id="summary" class="mt-4 space-y-4 text-sm"></dl>
+          <div class="bg-cream rounded p-3 mt-5 text-xs text-muted"><span class="font-semibold text-bronze-dark flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">info</span>Política flexible</span>Cancelación o reprogramación gratuita hasta 2 horas antes. Sin señas previas.</div>
+          <div class="flex items-end justify-between mt-5 pt-4 border-t border-line">
+            <span class="text-sm text-muted">Total estimado</span>
+            <span><span id="sumTotal" class="text-2xl font-bold">$ 0</span> <span class="text-xs text-slate">ARS</span></span>
+          </div>
+          <p class="text-[11px] text-slate text-right mt-1">Se abona en el local (efectivo / MP / débito)</p>
+          <button id="confirmBtn" class="mt-5 w-full py-4 rounded bg-bronze hover:bg-bronze-dark text-white font-semibold uppercase tracking-wider text-sm flex items-center justify-center gap-2"><span class="material-symbols-outlined">check_circle</span>Confirmar Reserva</button>
+          <p id="confirmHint" class="text-xs text-center text-slate mt-3"></p>
+        </div>
+      </div>
+      <div class="bg-white border border-line rounded-lg p-4 flex gap-3 text-sm"><span class="material-symbols-outlined text-bronze">local_cafe</span><div><div class="font-semibold">Cortesía de la Casa</div><div class="text-xs text-slate">Café de especialidad o whisky artesanal incluido con tu servicio.</div></div></div>
+    </aside>
+  </div>
+
+  <!-- Barra móvil -->
+  <div class="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-line px-4 py-3 flex items-center justify-between gap-3" id="mobileBar">
+    <div class="min-w-0"><div class="text-xs text-slate truncate" id="mbInfo">Elegí un servicio</div><div class="font-bold"><span id="mbTotal">$ 0</span> <span class="text-xs text-slate font-normal">ARS</span></div></div>
+    <button id="mbBtn" class="px-5 py-3 rounded bg-bronze text-white font-semibold text-sm shrink-0">Continuar</button>
+  </div>
+</section>
+
+<!-- ============ UBICACIÓN ============ -->
+<section class="page" data-page="ubicacion">
+  <div class="max-w-site mx-auto px-4 md:px-6 py-12 md:py-16">
+    <div class="eyebrow">Fácil Acceso</div>
+    <h1 class="font-serif text-[34px] leading-[40px] md:text-[44px] md:leading-[52px] mt-3">En pleno eje céntrico de Neuquén Capital</h1>
+    <div class="grid lg:grid-cols-[1fr_1.3fr] gap-8 mt-10">
+      <div class="space-y-6">
+        <div class="flex gap-4"><span class="material-symbols-outlined text-bronze">location_on</span><div><div class="font-semibold">Av. Argentina 450</div><div class="text-sm text-muted">Esquina Diagonal Alvear. Pleno microcentro, a 3 cuadras del Monumento a San Martín.</div></div></div>
+        <div class="flex gap-4"><span class="material-symbols-outlined text-bronze">local_parking</span><div><div class="font-semibold">Estacionamiento convenido</div><div class="text-sm text-muted">Cochera “El Centro” a 40 metros. 1 hora bonificada en servicios de más de 60 min.</div></div></div>
+        <div class="flex gap-4"><span class="material-symbols-outlined text-bronze">schedule</span><div class="w-full"><div class="font-semibold">Horarios de atención</div>
+          <table class="text-sm mt-2 w-full max-w-xs"><tbody id="hoursTable"></tbody></table></div></div>
+        <div class="flex gap-4"><span class="material-symbols-outlined text-bronze">call</span><div><div class="font-semibold" data-phone-display></div><div class="text-sm text-muted">Consultas por WhatsApp o llamada.</div></div></div>
+        <div class="flex flex-wrap gap-3 pt-2">
+          <a data-wa-general target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-3 rounded bg-ink text-cream hover:bg-ink2 text-sm font-semibold"><span class="material-symbols-outlined text-[18px]">chat</span>Consultas por WhatsApp</a>
+          <a id="gpsLink" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-3 rounded border border-ink hover:bg-white text-sm font-semibold"><span class="material-symbols-outlined text-[18px]">directions_car</span>Abrir GPS</a>
+        </div>
+      </div>
+      <div class="rounded-lg overflow-hidden border border-line bg-white min-h-[320px]">
+        <iframe id="mapFrame" title="Mapa de ubicación" class="w-full h-full min-h-[360px]" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-white border-t border-line">
+  <div class="max-w-site mx-auto px-4 md:px-6 py-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm">
+    <div><div class="flex items-center gap-2"><img data-img="logo" alt="" class="h-7 w-7"/><span class="font-semibold">Patagonia Grooming Co.</span></div><p class="text-muted mt-3">Santuario de estilismo masculino, corte clásico y afeitado tradicional con navaja en el corazón del Alto Valle de Neuquén.</p></div>
+    <div><div class="eyebrow">Ubicación</div><p class="mt-3 font-semibold">Neuquén Capital, Argentina</p><p class="text-muted">Av. Argentina 450 &amp; Diagonal Alvear</p><p class="mt-2" data-phone-display></p></div>
+    <div><div class="eyebrow">Horarios</div><p class="mt-3 font-semibold">Lunes a Viernes</p><p class="text-muted">09:30 – 20:30 hs (corrido)</p><p class="mt-2 font-semibold">Sábados</p><p class="text-muted">09:00 – 21:00 hs · Domingos cerrado</p></div>
+    <div><div class="eyebrow">Medios de Pago</div><div class="flex flex-wrap gap-2 mt-3"><span class="px-2 py-1 bg-cream rounded text-xs">Efectivo</span><span class="px-2 py-1 bg-cream rounded text-xs">Mercado Pago</span><span class="px-2 py-1 bg-cream rounded text-xs">Débito</span><span class="px-2 py-1 bg-cream rounded text-xs">Transferencia</span></div></div>
+  </div>
+  <div class="border-t border-line"><div class="max-w-site mx-auto px-4 md:px-6 py-5 text-xs text-slate flex flex-col sm:flex-row justify-between gap-2"><span>© <span id="year"></span> Patagonia Grooming Co. Neuquén, Patagonia Argentina.</span><span>Cancelaciones sin costo hasta 2 h antes.</span></div></div>
+</footer>
+
+<!-- WhatsApp flotante -->
+<a id="waFloat" data-wa-general target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp" class="fixed z-40 right-4 bottom-24 lg:bottom-6 w-14 h-14 rounded-full bg-wa shadow-soft grid place-items-center hover:scale-105 transition-transform">
+  <svg viewBox="0 0 32 32" class="w-7 h-7 fill-white" aria-hidden="true"><path d="M16 3C8.8 3 3 8.7 3 15.8c0 2.5.7 4.9 2 7L3 29l6.4-2c2 1.1 4.3 1.7 6.6 1.7 7.2 0 13-5.7 13-12.8S23.2 3 16 3zm0 23.4c-2.1 0-4.1-.6-5.9-1.7l-.4-.3-3.8 1.2 1.2-3.7-.3-.4c-1.2-1.8-1.9-3.8-1.9-6 0-5.9 4.9-10.7 11-10.7s11 4.8 11 10.7-4.9 10.9-10.9 10.9zm6-8c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.8.2-.2.3-.9 1.1-1.1 1.3-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.7-1.7-1-.9-1.7-2-1.9-2.3-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.4.3-.6.1-.2 0-.4 0-.6l-1.1-2.5c-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.2 1.4 3.5c.2.2 2.4 3.6 5.8 5 .8.4 1.4.6 1.9.7.8.3 1.6.2 2.2.1.7-.1 2-.8 2.3-1.6.3-.8.3-1.5.2-1.6-.1-.1-.3-.2-.6-.4z"/></svg>
+</a>
+
+<!-- Modal de confirmación -->
+<div id="modal" class="fixed inset-0 z-[60] hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="absolute inset-0 bg-ink/60" data-close></div>
+  <div class="absolute inset-x-4 top-1/2 -translate-y-1/2 mx-auto max-w-md bg-white rounded-lg shadow-soft overflow-hidden max-h-[90vh] overflow-y-auto">
+    <div class="bg-ink text-cream p-6">
+      <div class="text-xs uppercase tracking-widest text-bronze-soft font-semibold">Último paso</div>
+      <h3 id="modalTitle" class="font-serif text-2xl mt-1">Enviá tu pedido de turno</h3>
+    </div>
+    <div class="p-6">
+      <dl id="modalSummary" class="text-sm space-y-2"></dl>
+      <ol class="mt-6 space-y-3">
+        <li><a id="waBtn" target="_blank" rel="noopener" class="w-full flex items-center gap-3 px-4 py-3.5 rounded bg-wa text-white font-semibold hover:brightness-95">
+          <span class="w-6 h-6 rounded-full bg-white/25 grid place-items-center text-xs">1</span>Enviar pedido por WhatsApp<span class="material-symbols-outlined ml-auto">send</span></a>
+          <p class="text-xs text-slate mt-1.5">Se abre WhatsApp con el mensaje listo. Te respondemos confirmando el turno.</p></li>
+        <li><a id="gcalBtn" target="_blank" rel="noopener" class="w-full flex items-center gap-3 px-4 py-3.5 rounded border border-ink font-semibold hover:bg-cream">
+          <span class="w-6 h-6 rounded-full bg-cream grid place-items-center text-xs">2</span>Agregar a Google Calendar<span class="material-symbols-outlined ml-auto">event_available</span></a>
+          <p class="text-xs text-slate mt-1.5">Guardá el turno en tu calendario con dirección y recordatorio.</p></li>
+      </ol>
+      <button class="mt-6 w-full text-sm text-slate hover:text-ink" data-close>Volver y editar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   CONFIGURACIÓN — editá estos datos para actualizar la web
+   ========================================================= */
+const CONFIG = {
+  whatsapp: '5492994829100',             // Número de la barbería: 549 + código de área sin 0 + número sin 15
+  phoneDisplay: '+54 (299) 482-9100',
+  address: 'Av. Argentina 450, Neuquén Capital, Neuquén, Argentina',
+  businessName: 'Patagonia Grooming Co.',
+  calendarGuestEmail: '',                // Opcional: email de la barbería para que el evento le llegue como invitación
+  timezone: 'America/Argentina/Buenos_Aires',
+  daysAhead: 60,                         // Hasta cuántos días a futuro se puede reservar
+  slotStep: 30,                          // Minutos entre horarios ofrecidos
+  minNoticeMin: 60,                      // Anticipación mínima para turnos del día
+  // Horario del local por día (0=Dom … 6=Sáb). null = cerrado
+  hours: { 0: null, 1: ['09:30','20:30'], 2: ['09:30','20:30'], 3: ['09:30','20:30'], 4: ['09:30','20:30'], 5: ['09:30','20:30'], 6: ['09:00','21:00'] }
+};
+
+const IMG_BASE = 'https://lh3.googleusercontent.com/aida-public/';
+const IMG = {
+  logo: 'AB6AXuCDIVnsD3Z5HVoY3QK9VZTds8PuWXKjGum_4--IDfAhgyrnb7zkNiBwZqYouyLrKbH9BEfRqZ7BqRvwP5biScJBUJblu847DGtw8f6cJhJ0ibfmjq_SD3C6yjy6jjmugaIWrgJSpY2llUxAkYFgjVlq08vf9GB07IubNNZpqBAOjh3sdxQ4zzEhU9fGT8H2BY6lITKTxuwDR-Ru-0_HWHY1bGmTFpSowGmM731KGNg',
+  hero: 'AB6AXuDd7W6moqPYioFT0yjm1yXOIDi-81bu5uGhzNvppJKk7Nvv_m-WlaGkjT3AvgR3qY4P-IltXUYU-eUCpw0JDi3D2zbk5JBxf8QQRNeZtA0SUGvXLRymB_dZgpa6aXJhLd3xGhTgVxjNFiEhwE3R_1ZGsWedK4tZ7ap6i8YYzsb8IdUCkmh5MwoOCbm4EemvY3tAW9TbvbMuFGRNs-sNCBUC2qyBlFAUqMVZauI9OnU',
+  razor: 'AB6AXuDZ7q4WC9AnTPZ88FzEx7Afe8jdJ7RwMjpYIkSygGWWaLGAX2CBWyQq3yE9ZthM7hiv_4FVN1Z3wFcbNXVBXrcsHtoswkZjGxYBD639gw9vPxEyZsf9mu7jEeFcGDXtM2PZtMAA75MVKudAwoJiVO6oMqtHk1_Bp_mk57Rdpy_mEQTmTU-obN6Mkka_VleBQDcVWAKAR-TSiIyE5TEcfgbwD0vWocaKNusFa2ieIRY'
+};
+const img = id => IMG_BASE + id;
+
+/* Servicios: cat = cabello | barba | combos | tratamientos */
+const CATEGORIES = [
+  { id: 'cabello', n: '01', name: 'Cortes de Cabello', short: 'Cabello', tag: 'Tijera artesanal · Degradé milimétrico' },
+  { id: 'barba', n: '02', name: 'Barba & Afeitado Tradicional', short: 'Barba & Navaja', tag: 'Vapor · Navaja al ras · Cosmética botánica' },
+  { id: 'combos', n: '03', name: 'Combos & Experiencias Especiales', short: 'Combos', tag: 'La experiencia definitiva en el Alto Valle' },
+  { id: 'tratamientos', n: '04', name: 'Tratamientos Capilares & Faciales', short: 'Tratamientos', tag: 'Cuidado dermatológico · Rejuvenecimiento' }
+];
+const SERVICES = [
+  { id: 'corte', cat: 'cabello', name: 'Corte Clásico / Fade / Degradé', min: 45, price: 14000, icon: 'content_cut', featured: true,
+    desc: 'Lavado con shampoo mentolado, asesoramiento de visagismo según tu forma craneofacial y secado con peinado final.' },
+  { id: 'infantil', cat: 'cabello', name: 'Corte Infantil / Juvenil', min: 35, price: 11500, icon: 'face',
+    desc: 'Para niños y jóvenes de hasta 12 años. Atención con paciencia y peinado con pomada mate hipoalergénica.' },
+  { id: 'contornos', cat: 'cabello', name: 'Mantenimiento Contornos & Cuello', min: 20, price: 7500, icon: 'architecture',
+    desc: 'Limpieza rápida de patillas, perfil posterior y nuca a navaja suave. Ideal para mantener la frescura entre turnos.' },
+  { id: 'barba', cat: 'barba', name: 'Ritual de Barba Completo', min: 40, price: 11000, icon: 'spa', badge: 'Ritual Insignia', featured: true,
+    desc: 'Aceites pre-shave, doble toalla humeante, definición con navaja libre, bálsamo nutritivo y masaje facial.' },
+  { id: 'perfilado', cat: 'barba', name: 'Perfilado y Rebaje Express', min: 25, price: 8000, icon: 'tune',
+    desc: 'Rebaje parejo con clipper profesional, marcación de mejillas y cuello con navaja y loción mentolada.' },
+  { id: 'cabeza', cat: 'barba', name: 'Afeitado de Cabeza a Navaja', min: 40, price: 13000, icon: 'hdr_auto',
+    desc: 'Afeitado craneal completo, espuma caliente, toallas aromatizadas y crema protectora con SPF.' },
+  { id: 'combo', cat: 'combos', name: 'Combo Completo Patagónico', min: 75, price: 22500, icon: 'military_tech', badge: 'Más Elegido', featured: true,
+    sub: 'Corte + Barba Tradicional + Trago o Café de Cortesía', perks: ['Lavado premium', 'Toallas dobles', 'Degustación bar'],
+    desc: 'Corte a elección (tijera o máquina), afeitado de barba con toallas aromáticas, lavado capilar y bebida de la casa.' },
+  { id: 'novio', cat: 'combos', name: 'Servicio Novio / Evento Especial', min: 105, price: 38000, icon: 'diamond', badge: 'VIP Exclusivo', dark: true,
+    sub: 'Preparación integral para ocasiones inolvidables', perks: ['Carbón activado', 'Exfoliación termal', 'Espacio reservado'],
+    desc: 'Exfoliación facial profunda, mascarilla de carbón activado, corte de diseño, perfilado de barba a navaja y peinado de alta fijación.' },
+  { id: 'facial', cat: 'tratamientos', name: 'Limpieza Facial Profunda con Ozono', min: 35, price: 12000, icon: 'air',
+    desc: 'Vapor con ozono, extracción suave de impurezas, tónico regulador y mascarilla de fango mineral patagónico.' },
+  { id: 'nutricion', cat: 'tratamientos', name: 'Baño de Nutrición & Matizador de Canas', min: 30, price: 9500, icon: 'water_drop',
+    desc: 'Ampollas de keratina y biotina con tonalización sutil para disimular canas sin efecto tintura.' }
+];
+
+/* Barberos: hours por día (0=Dom … 6=Sáb). Si un día no figura, no atiende. */
+const BARBERS = [
+  { id: 'facundo', name: 'Facundo Morales', short: 'Facundo', role: 'Barbero Principal & Fundador', badge: 'Fundador & Master Barber', cat: 'clasico',
+    years: '10 años de oficio', rating: '4.98', reviews: 318, photo: 'AB6AXuBIi7LBuNI6vjrkdg35xBugLMcqjwLAn_0vbg8s9-UPDbgIMnP_PUFZ5fH7MEdE2nHZ6eIT662l9ZK0mXovMtl7SaHC-M6i65KIfoUt4y9cSYi3YOY6tJccSnGMYTdUiGTApEW5qDPpNzDL31-64EnJYDTEeTRu6hGq5Yq0WnPeMFFcsCBjnyzfpSeHPc1mxyBk7rC-0yBuARScZvw-NNexgc1o6D23bztjpYn_SM0',
+    quote: 'La precisión no se negocia. Una barba bien esculpida transforma la estructura de la mandíbula y define la seguridad de quien la viste.',
+    bio: 'Pionero de la renovación del aseo masculino en Neuquén. Formado en la tradición de las barberías de navaja abierta, aplica visagismo facial adaptado a la morfología de cada cliente.',
+    skills: ['Afeitado tradicional a navaja', 'Visagismo óseo', 'Toalla caliente & ozono', 'Barbas densas & perfilado'],
+    hours: { 2: ['10:00','19:30'], 3: ['10:00','19:30'], 4: ['10:00','19:30'], 5: ['10:00','19:30'], 6: ['09:00','18:00'] },
+    hoursText: ['Martes a Viernes · 10:00 a 19:30 hs', 'Sábados · 09:00 a 18:00 hs'],
+    works: [['AB6AXuAPFLJ1XGWzZbPTJCIt4LFP3aIq7wWYsKzOEC1c5CdRf9fIJtljIWH85Im7IyyeclXsg7SUN6-hahGFbjKxl9P25lTUDTje2QLOqs6QxG06sDB3vIKDT101H5ICQAmFDRIWNsrMikgOmabzIt7MgQDPqxmnIT4DNTcKCJROSCkn9HJvbg6c9LvkWWQTY9rCgb1cmGpNLJz_SB-XHj_CjNr4YX5MbVtRF69XVgq2Jkg','Ritual Navaja'],
+            ['AB6AXuCAHwT3f5xPf9q6piduibNQ9cTMWDrBdzVWis68mbN6XXwlHS5LCHEl9ypDHoaPPhvaDkPDdXXsxOeWSP36upWRdLz7J2SJfIWlRu-8QRWroXoiSwrKDNG5lDR1QtJix_Pd48AS8yXJmjVrn2g1OWhaj5Ifd37fk-b0tS850JF7DbAlUQiIByWxDi-MZ3wdu8LQtvT6w8UAxLpVysVagJlg32Nxiv7MpjBZnyfoUm8','Esculpido'],
+            ['AB6AXuAl6YHveqRqHy-G2-VW2PlYJcXwshWphezJnczqtgHcLvXh0-mAS1CcyK1acvt84W0A0jhsa0XGZjLuTZu3Uqr1LhWcTPCtL-nbs1KDP1tHJDct0Rkk_ui8cnSNr9B3E_fJKZh199HJ36BuKfGX-zad9PsL-zcaL2Yh3idFEU6HEJiKtYKG9M1MpSUyLwfcpRwoNqCx6aoLlDyXTtyek3BBW8RD-hLJACfM1o1T-hw','Vapor Ozono']] },
+  { id: 'nico', name: 'Nicolás “Nico” Rossi', short: 'Nico', role: 'Especialista en Fades & Diseños Urbanos', badge: 'Fades & Tendencia Urbana', cat: 'fades',
+    years: '6 años de trayectoria', rating: '4.95', reviews: 240, photo: 'AB6AXuAPwMK6rmDOGyblZ3bZFEtrJC1hrRxgQ1Fg1PkX6aDAjHeNUBeK6cg2X2JgWFRo6YZ6MMa-8X_S84yuvnQ7MAy3xzQnr5wZ-WhZoYNT5qV_tDCIHkaJUW2UJmPwHPmTrReGJQwACguWyeOOeYYHxpwP7-jTbttrjBdlN98mo4jD9se1UX-996Fs7TVYDbm95nAUzbgNXlBZWUKxRR3eKeJ_8d2So0mmCQaVVo5Oh7M',
+    quote: 'El degradado debe fundirse como seda en la piel; sin escalones, con volumen armónico y movimiento natural.',
+    bio: 'Formado en academias de Buenos Aires y São Paulo. Domina las transiciones milimétricas a navaja y shaver: Skin Fade, Taper Fade, French Crop y texturizados con polvos mate.',
+    skills: ['Low & Mid Skin Fade', 'Taper Fade pulido', 'French Crop texturizado', 'Styling con polvo & cera'],
+    hours: { 1: ['11:00','20:30'], 2: ['11:00','20:30'], 3: ['11:00','20:30'], 4: ['11:00','20:30'], 6: ['10:00','21:00'] },
+    hoursText: ['Lunes a Jueves · 11:00 a 20:30 hs', 'Sábados · 10:00 a 21:00 hs'],
+    works: [['AB6AXuCJWzpEpd-cIJME0SPDczCiBKgsc8gbYeuSFL3S_thPfsY4yxbXIr7pY2YZoSwsIwWGyTMJj5DEQpaNxhNd8XNBGmjKL-WchuGOovG8J7K_EC7cXGGwrlICKOXFcPkt8_VWcl6g9RZY2hu1wLEqgR0fNuGGDOaoc3tGubt16XSJub2LzjysC-sCGR2Rm7o9BTfngAr1Z7rYgyw1dHwWSzGhGPZ62oXTd2wXQrP36Nc','Skin Fade 0.0'],
+            ['AB6AXuA1zthzk9obh27V8DjGhELCiqgb4k2dlf_vPCC8GgxyTX-9m9EIW9Oz1GorztjXr6jkaHPg04bVj42kNb-050Ka6pPqCeSR-yHUHghV2Uc_a8PJngbqFxOOzovD7Oktu0z3upTXHBfyBRe-sF7mbwlFQ9LaVm85hn2iRqu0_OtWdGUkFYFmrv15mrOYV2UwpUe2lmjSR-rPx1GNzD4YqOwF2wL8_RB81kodmDXoUE4','Crop Texturizado'],
+            ['AB6AXuCDsom6HHel6WU4CPJpXcCvr-phsMi2PAnM0SzgE76wkKxLdu34E4HHpxWV8f9RPIONE5j_HduF1VdreCQGtu_rFGSFfvFAvODYF1BWR5FJuQ9Qpxsir_Xo5Kh9OJ-xtdiHfPkeRw32WpRgDRjMW1WWcO3QX8kYji7dJQHeOeTtvlssRvCAVbcCgoRH7RLoe60i5L7fV5mxSzm2OLoiLKNZAmKYQEDuQ9P5sEpeCdU','Taper Fade']] },
+  { id: 'santiago', name: 'Santiago Benítez', short: 'Santiago', role: 'Maestro Tijera Clásica & Pompadour', badge: 'Estilista Clásico & Tijera', cat: 'clasico',
+    years: '8 años de trayectoria', rating: '4.97', reviews: 215, photo: 'AB6AXuCx7bnn28HvaHjQwJqC4c7Nb5W3NMbyzDbvJMX6PgaEwSE7FFggBzdXm_2le1-IE5CKkynSUwLIG4OThqN08l7fAgae-U8MKldX_CdAMR9GpWSpsTH0tNkYO1BZc0-i1QcWtMkiot0jLmc5MdcQQzBDMZ-uwB_SBVe9654k3sZoFOZpssUDbETsZKPjfw3_X9KQ_5Qb-PBx49LEBsji28GybAAzePPNpH5zAc5VG1g',
+    quote: 'El verdadero lujo reside en la armonía de la tijera; un corte tradicional conserva su porte impecable aun cuando el pelo crece.',
+    bio: 'Referente para profesionales y ejecutivos que valoran proporciones sobrias. Especialista en tijera japonesa de entresacar, Side Part, pompadours estructurados y asesoría de imagen.',
+    skills: ['Corte 100% a tijera', 'Pompadour & Executive Contour', 'Asesoramiento corporativo', 'Peinado clásico con pomada'],
+    hours: { 1: ['09:30','18:30'], 2: ['09:30','18:30'], 3: ['09:30','18:30'], 4: ['09:30','18:30'], 5: ['09:30','18:30'] },
+    hoursText: ['Lunes a Viernes · 09:30 a 18:30 hs', 'Sábados · rotativo (consultar por WhatsApp)'],
+    works: [['AB6AXuBBjKNa_IBrd8K0rGizBqRY9x8yRDdViknP-1hAVtxUK2K_HvAV4d_BeyXtTIS4fcWxx5Vrdc9LlN4_CyhunuHotpKUJ1EoQiAargBMKdpq57gh8QRA1aWgQfl7IHkoHip_20Vva1s8jLbQa5xKZImo9S51dP_8mo9ptJOYM0E92UZf-gkYcgUsyA-ZUuX6mRZnH_nS1gW2vZ4Yj3mgdc9vflLyhEpmXYk4tHTpxX4','Executive Part'],
+            ['AB6AXuAFgd1lPJO_gPqjZfacKwH3flvHJGCAf6REMI-Q-TC7B384pJpEvQsOrADxhkVyzh8h6ATIr457RJTAuXXUwiEJZBAsP-gqVjWqEv6UPZ40orQJk_raVytNGy8lpX1zAmcRJJC9UHj-6brWqS2ha7ChENxOtnn_kA-qQiWIYYeaCDRHaR50u1i7AFiZasG_n775qLb4RxjiPKWD6BqMYnExTr0kq9wEo_xlYA2bQf4','Tijera Pura'],
+            ['AB6AXuClLzQOIeYrvjy-8XMy1-Rhlwv5B6MbGN0ZeX1GZgdG_JdncZvM8wd0s8lFkuS5jgAzK07sSjdxzFkc2XJuG9B7ZahiaWFB1owL1ay1FW7_G7EJNAp6ODl80CnkI-pOQaRz08xtHwcIB1puR0dFoJxPN_D8VsZAklEy5x1_sPkQA27Zp-qKCejvzAdxN5o0pmOYjykouwlJqd7vXk-nuABvrmc1mn-BGiga1o5dn_c','Pompadour']] },
+  { id: 'matias', name: 'Matías Gómez', short: 'Matías', role: 'Especialista en Nutrición Facial & Matización', badge: 'Colorimetría & Cuidado Facial', cat: 'color',
+    years: '5 años de especialización', rating: '4.94', reviews: 184, photo: 'AB6AXuAuAeDLRlN3E1VyG9PIKm1Fjy--_KMJYdJVOWYozPqwpbM5ePD87ZHR_u9rlCF9D1S0iMz24qJzSN-TcIHBawnef_wHSxiGik9-yCFXende0K6HtWjvj_ZdhaQTpkjRxVm3kuR6lXg-9-PVAV_witcdE2jKBI2rMZOtOuCtNVEd9TQOSOacno924cBIyKNg25gMwv6_MYpuvYFz9ZeRhuaSZYUObb_1hic9ZvW6O58',
+    quote: 'El camuflaje de canas y la nutrición dérmica deben verse completamente naturales: rejuvenecer el rostro sin artificios visibles.',
+    bio: 'Formado en dermocosmética masculina y matización de barbas y cabellos canosos. Lidera el área de salud capilar y spa con fórmulas sin amoníaco.',
+    skills: ['Camuflaje de canas', 'Exfoliación & arcilla negra', 'Keratina botánica', 'Perfilado & suero nutritivo'],
+    hours: { 1: ['14:00','20:00'], 3: ['10:30','20:30'], 4: ['10:30','20:30'], 5: ['10:30','20:30'], 6: ['10:30','20:30'] },
+    hoursText: ['Miércoles a Sábados · 10:30 a 20:30 hs', 'Lunes · 14:00 a 20:00 hs'],
+    works: [['AB6AXuCjVN6fXra1aKRb2139F-XE0xAu-t6m3MYIW7P-fW6n41g0mbxzOkYybbT9FImTgU2jfdFOJ7_6IGj1pVZAXpsE5zqRhi_nhQm2JFkO5c2J89QfhF2_9EFHLPIG810DKgOZIQoYg3l2qoQq62-CuThI0esm97WT2SEZSc8iRRgxKG1VoKFHs7Vi7A67ytuNMOzy_C4lrbJ6d5HZuu7LcvXXVLOmuA8HgHD4qPSTots','Matizado Barba'],
+            ['AB6AXuAsqfpllpOJJc5m_52afVXzqXFIY9Efy65v6xKvSZa6TIZVG7kamC5hGx0NKZhYscmylKqQUiGLAvwO1Bgxn4NOaMmr69I1IqxIhUJRB6iz2C1iT9U3qfSSkL-ehPobjKOs6HptQ8VF-T8iYzDirgxAVre8BGJ3O6Ji9kJMEwryjkIO2QLqDVtR0eJ56D59qqYzJKem9qZt-UajcYGi4NhBP1xkxsb-o5MNQI_G8k8','Spa Facial'],
+            ['AB6AXuAzIcSWF5nX9SXNuzxhkZi48ecyN5Ec_feXKlyLwSvAS62pG385pfK857IAZp1_SS2MGpK-0SJFCeewZhw46cV93pFI70PBwxLHcIZ_jQQcBNsQkl1lnzVKiFcqI-lwyzh1SrOt9uqA6Si5eYDR43vem19dgt9umbcGCDGgx9wMRrtzPQ9QwP-VRf1m-ZA0MEUC8IjaPhnyWsMwLpOsUFp_YcX5oT7io08hLkAK1sI','Nutrición Capilar']] }
+];
+const STAFF_FILTERS = [['all', 'Todos los barberos'], ['clasico', 'Clásico & Navaja'], ['fades', 'Fades & Texturas'], ['color', 'Color & Cuidado Facial']];
+
+/* =========================================================
+   Utilidades
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const money = n => '$ ' + n.toLocaleString('es-AR');
+const pad = n => String(n).padStart(2, '0');
+const toMin = hhmm => { const [h, m] = hhmm.split(':').map(Number); return h * 60 + m; };
+const fromMin = m => pad(Math.floor(m / 60)) + ':' + pad(m % 60);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const dur = m => m < 60 ? `${m} min` : `${Math.floor(m / 60)} h${m % 60 ? ' ' + (m % 60) + ' min' : ''}`;
+const sameDay = (a, b) => a && b && a.toDateString() === b.toDateString();
+const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+const longDate = d => d.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
+const waLink = text => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
+
+/* =========================================================
+   Router (una sola página, varias secciones)
+   ========================================================= */
+const PAGES = [['inicio', 'Inicio'], ['servicios', 'Servicios & Tarifas'], ['profesionales', 'Profesionales'], ['reservar', 'Reservar Turno'], ['ubicacion', 'Ubicación & Horarios']];
+
+function buildNav() {
+  $('#desktopNav').innerHTML = PAGES.map(([id, label]) =>
+    `<a href="#${id}" data-nav="${id}" class="px-3 py-2 rounded text-sm font-medium text-muted hover:bg-white hover:text-ink transition-colors">${label}</a>`).join('');
+  $('#mobileNav').innerHTML = PAGES.map(([id, label]) =>
+    `<a href="#${id}" data-nav="${id}" class="px-3 py-3 rounded text-base font-medium">${label}</a>`).join('');
+}
+
+function go(h) {
+  try { history.pushState(null, '', '#' + h); } catch (e) { /* entornos sin historial (vista previa) */ }
+  route(h);
+}
+
+function route(h = location.hash.slice(1)) {
+  const [page, anchor] = (h || 'inicio').split('/');
+  const target = PAGES.some(p => p[0] === page) ? page : 'inicio';
+  $$('.page').forEach(p => p.classList.toggle('active', p.dataset.page === target));
+  $$('[data-nav]').forEach(a => {
+    const on = a.dataset.nav === target;
+    a.classList.toggle('bg-white', on); a.classList.toggle('text-ink', on); a.classList.toggle('font-semibold', on);
+    if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+  });
+  closeMenu();
+  $('#waFloat').classList.toggle('max-lg:hidden', target === 'reservar'); // en el turnero móvil ya está la barra inferior
+  document.title = (target === 'inicio' ? '' : PAGES.find(p => p[0] === target)[1] + ' · ') + 'Patagonia Grooming Co. · Neuquén';
+  const el = anchor && document.getElementById(anchor);
+  if (el) requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth' }));
+  else window.scrollTo({ top: 0 });
+}
+
+function closeMenu() { $('#mobileNav').classList.add('hidden'); $('#mobileNav').classList.remove('flex'); $('#menuBtn').setAttribute('aria-expanded', 'false'); }
+$('#menuBtn').addEventListener('click', () => {
+  const nav = $('#mobileNav'), open = nav.classList.contains('hidden');
+  nav.classList.toggle('hidden', !open); nav.classList.toggle('flex', open);
+  $('#menuBtn').setAttribute('aria-expanded', String(open));
+});
+
+/* =========================================================
+   Render de contenido
+   ========================================================= */
+function renderHome() {
+  $('#homeFeatured').innerHTML = SERVICES.filter(s => s.featured).map(s => {
+    const dark = s.cat === 'combos';
+    return `<div class="${dark ? 'bg-ink text-cream md:-my-3 shadow-soft' : 'bg-white border border-line hover:border-bronze'} rounded-lg p-6 flex flex-col transition-colors relative">
+      ${dark ? `<span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-bronze text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded">El más elegido</span>` : ''}
+      <div class="flex justify-between items-center"><span class="text-xs px-2 py-1 rounded ${dark ? 'bg-white/10' : 'bg-cream'}">${dur(s.min)}</span><span class="material-symbols-outlined ${dark ? 'text-bronze-soft' : 'text-bronze'}">${s.icon}</span></div>
+      <h3 class="font-serif text-2xl mt-5">${s.name}</h3>
+      <p class="text-sm mt-2 flex-1 ${dark ? 'text-cream/70' : 'text-muted'}">${s.desc}</p>
+      <div class="flex items-end justify-between mt-6"><span class="text-xs uppercase tracking-wider ${dark ? 'text-cream/60' : 'text-slate'}">Valor</span><span class="text-xl font-bold">${money(s.price)} <span class="text-xs font-normal opacity-70">ARS</span></span></div>
+      <button data-book-service="${s.id}" class="mt-4 w-full py-3 rounded text-sm font-semibold ${dark ? 'bg-bronze hover:bg-bronze-dark text-white' : 'bg-cream hover:bg-line'}">Elegir turno</button>
+    </div>`;
+  }).join('');
+
+  $('#homeBarbers').innerHTML = BARBERS.map(b => `
+    <div class="group">
+      <div class="relative overflow-hidden rounded-lg"><img src="${img(b.photo)}" alt="Retrato de ${esc(b.name)}" loading="lazy" class="w-full aspect-[3/4] object-cover group-hover:scale-[1.03] transition-transform duration-500"/>
+        <span class="absolute bottom-3 left-3 bg-white/95 text-[11px] font-semibold px-2 py-1 rounded">${b.years}</span></div>
+      <h3 class="font-semibold mt-4">${b.name}</h3>
+      <p class="text-xs uppercase tracking-wider text-bronze-dark mt-1">${b.role}</p>
+      <button data-book-barber="${b.id}" class="mt-3 w-full py-2.5 rounded border border-line text-xs font-semibold uppercase tracking-wider hover:border-bronze">Reservar con ${b.short}</button>
+    </div>`).join('');
+  $$('[data-barber-count]').forEach(e => e.textContent = BARBERS.length);
+}
+
+function renderServices() {
+  $('#catChips').innerHTML = CATEGORIES.map(c => `<a href="#servicios/cat-${c.id}" class="px-3 py-1.5 rounded bg-white border border-line text-xs font-medium hover:border-bronze">${c.n}. ${c.short}</a>`).join('');
+  $('#serviceCatalog').innerHTML = CATEGORIES.map(c => {
+    const items = SERVICES.filter(s => s.cat === c.id);
+    const isCombo = c.id === 'combos';
+    const cards = items.map(s => {
+      const d = s.dark;
+      return `<div class="${d ? 'bg-ink text-cream' : 'bg-white border border-line hover:border-bronze'} rounded-lg p-6 flex flex-col transition-colors">
+        <div class="flex justify-between items-center gap-2">
+          <span class="text-[11px] font-semibold px-2 py-1 rounded ${s.badge ? (d ? 'bg-bronze text-white' : 'bg-bronze-soft/50 text-bronze-dark') : 'bg-cream'}">${s.badge ? s.badge + ' · ' : ''}${dur(s.min)}</span>
+          <span class="material-symbols-outlined ${d ? 'text-bronze-soft' : 'text-bronze'}">${s.icon}</span></div>
+        <h3 class="${isCombo ? 'font-serif text-2xl' : 'font-semibold text-lg'} mt-4">${s.name}</h3>
+        ${s.sub ? `<p class="text-xs font-semibold ${d ? 'text-bronze-soft' : 'text-bronze-dark'} mt-1">${s.sub}</p>` : ''}
+        <p class="text-sm mt-2 flex-1 ${d ? 'text-cream/75' : 'text-muted'}">${s.desc}</p>
+        ${s.perks ? `<div class="flex flex-wrap gap-2 mt-4">${s.perks.map(p => `<span class="text-[11px] px-2 py-1 rounded ${d ? 'bg-white/10' : 'bg-cream'}">✓ ${p}</span>`).join('')}</div>` : ''}
+        <div class="flex items-end justify-between mt-6"><span class="text-[11px] uppercase tracking-wider ${d ? 'text-cream/60' : 'text-slate'}">${isCombo ? 'Inversión total' : 'Tarifa oficial'}</span><span class="text-xl font-bold">${money(s.price)} <span class="text-xs font-normal opacity-70">ARS</span></span></div>
+        <button data-book-service="${s.id}" class="mt-4 w-full py-3 rounded text-sm font-semibold flex items-center justify-center gap-2 ${d ? 'bg-bronze hover:bg-bronze-dark text-white' : 'bg-ink hover:bg-ink2 text-cream'}">Elegir y Reservar <span class="material-symbols-outlined text-[18px]">calendar_today</span></button>
+      </div>`;
+    }).join('');
+    const banner = c.id === 'barba' ? `<div class="bg-white border border-line rounded-lg overflow-hidden grid md:grid-cols-[320px_1fr] mb-8">
+        <img src="${img(IMG.razor)}" alt="Navaja, brocha y aceites para barba sobre una mesada de madera" loading="lazy" class="w-full h-56 md:h-full object-cover"/>
+        <div class="p-6 md:p-8 self-center"><div class="eyebrow">El Santuario del Afeitado</div><h3 class="font-serif text-2xl mt-2">Toallas calientes con lavanda patagónica y hojas afiladas con maestría.</h3><p class="text-sm text-muted mt-2">Rescatamos la ceremonia del afeitado clásico italiano adaptado al viento y la sequedad del clima de Neuquén.</p></div></div>` : '';
+    return `<div id="cat-${c.id}" class="scroll-mt-28">${banner}
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-1 mb-6"><h2 class="font-serif text-[26px] leading-[32px]"><span class="text-bronze-dark text-lg mr-2">${c.n}</span>${c.name}</h2><span class="text-xs uppercase tracking-wider text-slate">${c.tag}</span></div>
+      <div class="grid ${isCombo || items.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'} gap-5">${cards}</div></div>`;
+  }).join('');
+}
+
+let staffFilter = 'all';
+function renderStaff() {
+  $('#staffFilters').innerHTML = STAFF_FILTERS.map(([id, label]) => {
+    const n = id === 'all' ? ` (${BARBERS.length})` : '';
+    return `<button data-staff="${id}" class="shrink-0 px-4 py-2 rounded text-xs font-semibold uppercase tracking-wider ${staffFilter === id ? 'bg-ink text-cream' : 'bg-white border border-line hover:border-bronze'}">${label}${n}</button>`;
+  }).join('');
+  $('#staffList').innerHTML = BARBERS.filter(b => staffFilter === 'all' || b.cat === staffFilter).map(b => `
+    <article class="bg-white border border-line rounded-lg p-5 md:p-8 grid md:grid-cols-[260px_1fr] gap-6 md:gap-8">
+      <div>
+        <div class="relative"><img src="${img(b.photo)}" alt="Retrato de ${esc(b.name)}" loading="lazy" class="w-full aspect-[3/4] object-cover rounded-md"/>
+          <span class="absolute top-3 left-3 bg-ink text-cream text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">${b.badge}</span>
+          <span class="absolute bottom-3 right-3 bg-white/95 text-[11px] font-semibold px-2 py-1 rounded">${b.years}</span></div>
+        <div class="bg-cream rounded p-3 mt-3 text-xs space-y-1"><div class="font-semibold uppercase tracking-wider text-[10px] text-slate">Días de atención</div>${b.hoursText.map(t => `<div>${t}</div>`).join('')}</div>
+      </div>
+      <div class="flex flex-col min-w-0">
+        <div class="flex flex-wrap justify-between gap-3"><div><h2 class="font-serif text-[26px] leading-[32px]">${b.name}</h2><p class="text-xs uppercase tracking-wider text-bronze-dark mt-1">${b.role}</p></div>
+          <span class="self-start text-sm border border-line rounded px-2 py-1"><span class="text-bronze">★</span> <b>${b.rating}</b> <span class="text-slate text-xs">(${b.reviews} opiniones)</span></span></div>
+        <blockquote class="font-serif italic text-lg border-l-2 border-bronze pl-4 mt-5 bg-cream/60 py-2 pr-2">“${b.quote}”</blockquote>
+        <p class="text-sm text-muted mt-4">${b.bio}</p>
+        <div class="flex flex-wrap gap-2 mt-4">${b.skills.map(s => `<span class="text-[11px] uppercase tracking-wide bg-cream px-2 py-1 rounded">${s}</span>`).join('')}</div>
+        <div class="text-[11px] uppercase tracking-wider text-slate mt-6">Trabajos recientes</div>
+        <div class="grid grid-cols-3 gap-2 mt-2">${b.works.map(([src, cap]) => `<figure class="relative"><img src="${img(src)}" alt="${esc(cap)}" loading="lazy" class="w-full aspect-[4/3] object-cover rounded"/><figcaption class="absolute bottom-1 left-1 bg-ink/80 text-cream text-[10px] px-1.5 py-0.5 rounded">${cap}</figcaption></figure>`).join('')}</div>
+        <div class="flex justify-end mt-6"><button data-book-barber="${b.id}" class="inline-flex items-center gap-2 px-5 py-3 rounded bg-ink text-cream hover:bg-ink2 text-xs font-semibold uppercase tracking-wider"><span class="material-symbols-outlined text-[18px]">calendar_today</span>Reservar turno con ${b.short}</button></div>
+      </div>
+    </article>`).join('');
+}
+
+function renderLocation() {
+  const names = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  const today = new Date().getDay();
+  $('#hoursTable').innerHTML = [1, 2, 3, 4, 5, 6, 0].map(d => {
+    const h = CONFIG.hours[d];
+    return `<tr class="${d === today ? 'font-semibold text-ink' : 'text-muted'}"><td class="py-0.5 pr-4">${names[d]}${d === today ? ' (hoy)' : ''}</td><td class="text-right">${h ? h.join(' – ') + ' hs' : 'Cerrado'}</td></tr>`;
+  }).join('');
+  const q = encodeURIComponent(CONFIG.address);
+  $('#mapFrame').src = `https://www.google.com/maps?q=${q}&output=embed`;
+  $('#gpsLink').href = `https://www.google.com/maps/dir/?api=1&destination=${q}`;
+}
+
+function renderOpenBadge() {
+  const now = new Date(), h = CONFIG.hours[now.getDay()], m = now.getHours() * 60 + now.getMinutes();
+  const open = h && m >= toMin(h[0]) && m < toMin(h[1]);
+  $('#openBadge').innerHTML = `<span class="w-2 h-2 rounded-full ${open ? 'bg-wa' : 'bg-bronze'}"></span><span>${open ? `Abierto ahora · hasta las ${h[1]} hs` : 'Abierto de Lun a Sáb · Centro Neuquén'}</span>`;
+}
+
+/* =========================================================
+   Turnero
+   ========================================================= */
+const state = { services: new Set(), barber: 'any', date: null, time: null, cat: 'all' };
+let calMonth = startOfDay(new Date()); calMonth.setDate(1);
+
+const selectedServices = () => SERVICES.filter(s => state.services.has(s.id));
+const totalMin = () => selectedServices().reduce((a, s) => a + s.min, 0);
+const totalPrice = () => selectedServices().reduce((a, s) => a + s.price, 0);
+const barberObj = () => BARBERS.find(b => b.id === state.barber);
+const barberLabel = () => barberObj() ? barberObj().name : 'Cualquier barbero disponible';
+const hoursFor = (barberId, day) => barberId === 'any' ? CONFIG.hours[day] : (BARBERS.find(b => b.id === barberId).hours[day] || null);
+
+function slotsFor(date) {
+  const h = hoursFor(state.barber, date.getDay());
+  if (!h) return [];
+  const need = Math.max(totalMin(), 20);
+  const now = new Date();
+  const earliest = sameDay(date, now) ? now.getHours() * 60 + now.getMinutes() + CONFIG.minNoticeMin : -1;
+  const out = [];
+  for (let t = toMin(h[0]); t + need <= toMin(h[1]); t += CONFIG.slotStep) if (t >= earliest) out.push(fromMin(t));
+  return out;
+}
+function dayAvailable(date) {
+  const today = startOfDay(new Date()), max = new Date(today); max.setDate(max.getDate() + CONFIG.daysAhead);
+  return date >= today && date <= max && slotsFor(date).length > 0;
+}
+
+function renderStepper() {
+  const done = [state.services.size > 0, true, !!(state.date && state.time), contactValid(false)];
+  const labels = ['Servicio', 'Barbero', 'Fecha / Hora', 'Tus Datos'];
+  $('#stepper').innerHTML = labels.map((l, i) => `
+    <li><a href="#reservar/step${i + 1}" class="shrink-0 flex items-center gap-2 px-3 py-2 rounded-full ${done[i] ? 'bg-ink text-cream' : 'bg-white border border-line text-slate'}">
+      <span class="w-5 h-5 rounded-full grid place-items-center text-[10px] ${done[i] ? 'bg-bronze text-white' : 'bg-cream'}">${done[i] ? '✓' : i + 1}</span>${l}</a></li>`).join('');
+}
+
+function renderBookServices() {
+  const cats = [['all', 'Todos'], ...CATEGORIES.map(c => [c.id, c.short])];
+  $('#bookCatFilter').innerHTML = cats.map(([id, l]) => `<button data-bcat="${id}" class="shrink-0 px-3 py-1.5 rounded text-xs font-semibold ${state.cat === id ? 'bg-ink text-cream' : 'hover:bg-cream'}">${l}</button>`).join('');
+  $('#bookServices').innerHTML = SERVICES.filter(s => state.cat === 'all' || s.cat === state.cat).map(s => {
+    const on = state.services.has(s.id);
+    return `<button data-toggle-service="${s.id}" aria-pressed="${on}" class="text-left bg-white border border-line rounded-lg p-5 hover:border-bronze transition-colors flex flex-col ${on ? 'sel' : ''}">
+      <div class="flex items-center gap-2 text-xs text-slate"><span class="material-symbols-outlined text-[16px] text-bronze">timer</span>${dur(s.min)}${s.badge ? `<span class="ml-auto bg-bronze-dark text-white text-[10px] font-bold uppercase px-2 py-0.5 rounded">${s.badge}</span>` : ''}</div>
+      <div class="font-semibold mt-2">${s.name}</div>
+      <p class="text-xs text-muted mt-1 flex-1">${s.desc}</p>
+      <div class="flex items-center justify-between mt-4"><span class="font-bold text-lg">${money(s.price)} <span class="text-[11px] font-normal text-slate">ARS</span></span>
+        <span class="w-8 h-8 rounded-full grid place-items-center ${on ? 'bg-bronze text-white' : 'bg-cream'}"><span class="material-symbols-outlined text-[18px]">${on ? 'check' : 'add'}</span></span></div>
+    </button>`;
+  }).join('');
+}
+
+function nextAvailableText(barberId) {
+  const prev = state.barber; state.barber = barberId;
+  let d = startOfDay(new Date()), txt = 'Sin turnos próximos';
+  for (let i = 0; i <= 14; i++) {
+    const s = slotsFor(d);
+    if (s.length) { txt = (i === 0 ? 'Hoy' : i === 1 ? 'Mañana' : d.toLocaleDateString('es-AR', { weekday: 'short', day: 'numeric' })) + ' desde ' + s[0] + ' hs'; break; }
+    d.setDate(d.getDate() + 1);
+  }
+  state.barber = prev;
+  return txt;
+}
+
+function renderBookBarbers() {
+  const any = state.barber === 'any';
+  $('#bookBarbers').innerHTML = `<button data-pick-barber="any" aria-pressed="${any}" class="text-left bg-white border border-line rounded-lg p-4 hover:border-bronze flex flex-col ${any ? 'sel' : ''}">
+      <div class="flex items-center gap-3"><span class="w-12 h-12 rounded bg-bronze-dark text-white grid place-items-center"><span class="material-symbols-outlined">bolt</span></span>
+      <div><div class="font-semibold">Cualquier barbero</div><div class="text-xs text-bronze-dark">Turno más rápido</div></div></div>
+      <p class="text-xs text-muted mt-3 flex-1">Te asignamos el primer profesional disponible.</p>
+      <div class="text-xs mt-3 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-wa"></span>${nextAvailableText('any')}</div></button>` +
+    BARBERS.map(b => {
+      const on = state.barber === b.id;
+      return `<button data-pick-barber="${b.id}" aria-pressed="${on}" class="relative text-left bg-white border border-line rounded-lg p-4 hover:border-bronze flex flex-col ${on ? 'sel' : ''}">
+        ${on ? '<span class="material-symbols-outlined absolute top-3 right-3 text-bronze text-[20px]" style="font-variation-settings:\'FILL\' 1">check_circle</span>' : ''}
+        <div class="flex items-center gap-3"><img src="${img(b.photo)}" alt="" class="w-12 h-12 rounded object-cover"/>
+        <div class="min-w-0"><div class="font-semibold truncate">${b.name}</div><div class="text-xs text-slate truncate">${b.badge}</div></div></div>
+        <div class="flex flex-wrap gap-1 mt-3 flex-1">${b.skills.slice(0, 2).map(s => `<span class="text-[10px] bg-cream px-1.5 py-0.5 rounded">${s}</span>`).join('')}</div>
+        <div class="text-xs mt-3 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-wa"></span>${nextAvailableText(b.id)}</div></button>`;
+    }).join('');
+}
+
+function renderCalendar() {
+  const y = calMonth.getFullYear(), m = calMonth.getMonth();
+  $('#calTitle').textContent = calMonth.toLocaleDateString('es-AR', { month: 'long', year: 'numeric' }).replace(/^./, c => c.toUpperCase());
+  const today = startOfDay(new Date());
+  const thisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const max = new Date(today); max.setDate(max.getDate() + CONFIG.daysAhead);
+  $('#calPrev').disabled = calMonth <= thisMonth;
+  $('#calNext').disabled = new Date(y, m + 1, 1) > max;
+  const offset = (new Date(y, m, 1).getDay() + 6) % 7, days = new Date(y, m + 1, 0).getDate();
+  let html = '<div></div>'.repeat(offset);
+  for (let d = 1; d <= days; d++) {
+    const date = new Date(y, m, d), ok = dayAvailable(date), on = sameDay(date, state.date), isToday = sameDay(date, today);
+    html += `<button ${ok ? `data-day="${d}"` : 'disabled'} aria-label="${longDate(date)}${ok ? '' : ' (no disponible)'}" class="h-10 md:h-11 rounded text-sm ${on ? 'bg-ink text-cream font-semibold' : ok ? 'hover:bg-tint hover:text-bronze-dark font-medium' : 'text-line cursor-not-allowed'} ${isToday && !on ? 'ring-1 ring-bronze' : ''}">${d}</button>`;
+  }
+  $('#calGrid').innerHTML = html;
+  renderSlots();
+}
+
+function renderSlots() {
+  if (!state.date) { $('#slots').innerHTML = `<p class="text-sm text-slate bg-cream rounded p-4">Elegí un día del calendario para ver los horarios disponibles.</p>`; return; }
+  const slots = slotsFor(state.date);
+  if (state.time && !slots.includes(state.time)) state.time = null;
+  const am = slots.filter(s => toMin(s) < 13 * 60), pm = slots.filter(s => toMin(s) >= 13 * 60);
+  const group = (title, list) => list.length ? `<div class="mt-4"><div class="text-[11px] font-semibold uppercase tracking-wider text-slate">${title}</div>
+    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 mt-2">${list.map(t => `<button data-time="${t}" class="py-2.5 rounded text-sm font-medium border ${state.time === t ? 'bg-ink text-cream border-ink' : 'border-line bg-cream hover:border-bronze'}">${t}</button>`).join('')}</div></div>` : '';
+  $('#slots').innerHTML = `<div class="font-semibold text-sm capitalize">${longDate(state.date)}</div>` +
+    (slots.length ? group('Mañana', am) + group('Tarde & noche', pm) : `<p class="text-sm text-slate mt-2">No hay horarios para este día con la duración elegida.</p>`) +
+    `<p class="text-[11px] text-slate mt-4">Los horarios son a confirmar: te respondemos por WhatsApp validando la disponibilidad.</p>`;
+}
+
+function renderSummary() {
+  const svcs = selectedServices();
+  const row = (icon, label, value) => `<div><dt class="text-[10px] font-semibold uppercase tracking-wider text-slate">${label}</dt><dd class="mt-0.5 flex items-start gap-1.5"><span class="material-symbols-outlined text-[16px] text-bronze mt-0.5">${icon}</span><span>${value}</span></dd></div>`;
+  $('#summary').innerHTML =
+    row('content_cut', 'Servicio', svcs.length ? svcs.map(s => `<span class="block font-semibold">${s.name}</span>`).join('') + `<span class="text-xs text-bronze-dark">${dur(totalMin())}</span>` : '<span class="text-slate">Sin elegir</span>') +
+    row('person', 'Profesional', barberLabel()) +
+    row('event', 'Fecha & horario', state.date && state.time ? `<span class="capitalize">${longDate(state.date)}</span> · ${state.time} hs` : '<span class="text-slate">Sin elegir</span>') +
+    row('location_on', 'Sede', 'Av. Argentina 450 · Neuquén Centro');
+  $('#sumTotal').textContent = money(totalPrice());
+  $('#mbTotal').textContent = money(totalPrice());
+  $('#mbInfo').textContent = svcs.length ? `${svcs.length} servicio${svcs.length > 1 ? 's' : ''} · ${dur(totalMin())}${state.time ? ' · ' + state.time + ' hs' : ''}` : 'Elegí un servicio';
+  const missing = firstMissing();
+  $('#confirmHint').textContent = missing ? 'Falta: ' + missing.label : 'Todo listo para enviar.';
+  $('#mbBtn').textContent = missing ? 'Continuar' : 'Confirmar';
+  renderStepper();
+}
+
+function contactValid(mark) {
+  const name = $('#fName').value.trim(), phone = $('#fPhone').value.replace(/\D/g, '');
+  const email = $('#fEmail').value.trim();
+  const okName = name.length >= 2, okPhone = phone.length >= 8, okEmail = !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if (mark) { $('#fName').classList.toggle('err', !okName); $('#fPhone').classList.toggle('err', !okPhone); $('#fEmail').classList.toggle('err', !okEmail); }
+  return okName && okPhone && okEmail;
+}
+
+function firstMissing() {
+  if (!state.services.size) return { step: 'step1', label: 'elegir un servicio' };
+  if (!state.date) return { step: 'step3', label: 'elegir el día' };
+  if (!state.time) return { step: 'step3', label: 'elegir el horario' };
+  if (!contactValid(false)) return { step: 'step4', label: 'completar tus datos' };
+  return null;
+}
+
+function refreshBooking() { renderBookServices(); renderBookBarbers(); renderCalendar(); renderSummary(); }
+
+/* --- Enlaces de WhatsApp y Google Calendar --- */
+function bookingDetails() {
+  const svcs = selectedServices();
+  const start = new Date(state.date); const [h, m] = state.time.split(':').map(Number); start.setHours(h, m, 0, 0);
+  const end = new Date(start.getTime() + totalMin() * 60000);
+  return {
+    svcs, start, end,
+    name: $('#fName').value.trim(), phone: $('#fPhone').value.trim(),
+    email: $('#fEmail').value.trim(), notes: $('#fNotes').value.trim()
+  };
+}
+
+function buildWhatsApp(b) {
+  const lines = [
+    `¡Hola ${CONFIG.businessName}! Quiero reservar un turno:`, '',
+    `✂️ Servicio: ${b.svcs.map(s => s.name).join(' + ')}`,
+    `💈 Barbero: ${barberLabel()}`,
+    `📅 Fecha: ${longDate(b.start)}`,
+    `🕒 Hora: ${state.time} hs (${dur(totalMin())} aprox.)`,
+    `💵 Total estimado: ${money(totalPrice())} ARS`, '',
+    `👤 Nombre: ${b.name}`,
+    `📱 WhatsApp: ${b.phone}`
+  ];
+  if (b.email) lines.push(`✉️ Email: ${b.email}`);
+  if (b.notes) lines.push(`📝 Notas: ${b.notes}`);
+  lines.push('', '¿Me confirman disponibilidad? ¡Gracias!');
+  return waLink(lines.join('\n'));
+}
+
+function buildGCal(b) {
+  const f = d => `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+  const details = [
+    `Servicio: ${b.svcs.map(s => s.name).join(' + ')}`,
+    `Barbero: ${barberLabel()}`,
+    `Duración: ${dur(totalMin())}`,
+    `Total estimado: ${money(totalPrice())} ARS (se abona en el local)`, '',
+    `Cliente: ${b.name} · ${b.phone}`,
+    b.notes ? `Notas: ${b.notes}` : '',
+    '', `Reprogramá o cancelá sin costo hasta 2 h antes por WhatsApp: https://wa.me/${CONFIG.whatsapp}`
+  ].filter((l, i, a) => l !== '' || a[i - 1] !== '').join('\n');
+  const p = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: `Turno en ${CONFIG.businessName} – ${b.svcs.map(s => s.name).join(' + ')}`,
+    dates: `${f(b.start)}/${f(b.end)}`,
+    ctz: CONFIG.timezone,
+    details, location: CONFIG.address
+  });
+  if (CONFIG.calendarGuestEmail) p.set('add', CONFIG.calendarGuestEmail);
+  return 'https://calendar.google.com/calendar/render?' + p.toString();
+}
+
+let lastFocus = null;
+function confirmBooking() {
+  const missing = firstMissing();
+  if (missing) {
+    if (missing.step === 'step4') contactValid(true);
+    if (!$('[data-page="reservar"]').classList.contains('active')) go('reservar/' + missing.step);
+    else document.getElementById(missing.step).scrollIntoView({ behavior: 'smooth' });
+    if (missing.step === 'step4') setTimeout(() => (contactValid(false) ? null : ($('#fName').value.trim().length < 2 ? $('#fName') : $('#fPhone')).focus({ preventScroll: true })), 400);
+    return;
+  }
+  const b = bookingDetails();
+  const row = (k, v) => `<div class="flex justify-between gap-4"><dt class="text-slate">${k}</dt><dd class="text-right font-medium">${esc(v)}</dd></div>`;
+  $('#modalSummary').innerHTML = row('Servicio', b.svcs.map(s => s.name).join(' + ')) + row('Barbero', barberLabel()) +
+    row('Fecha', longDate(b.start)) + row('Hora', `${state.time} hs · ${dur(totalMin())}`) + row('Total', money(totalPrice()) + ' ARS');
+  $('#waBtn').href = buildWhatsApp(b);
+  $('#gcalBtn').href = buildGCal(b);
+  lastFocus = document.activeElement;
+  $('#modal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  $('#waBtn').focus();
+}
+function closeModal() { $('#modal').classList.add('hidden'); document.body.style.overflow = ''; lastFocus && lastFocus.focus(); }
+
+/* --- Eventos --- */
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-book-service],[data-book-barber],[data-toggle-service],[data-pick-barber],[data-bcat],[data-day],[data-time],[data-staff],[data-close]');
+  if (!t) return;
+  const d = t.dataset;
+  if (d.bookService) { state.services.add(d.bookService); state.cat = 'all'; refreshBooking(); go('reservar/step2'); }
+  else if (d.bookBarber) { state.barber = d.bookBarber; refreshBooking(); go('reservar/step1'); }
+  else if (d.toggleService) { state.services.has(d.toggleService) ? state.services.delete(d.toggleService) : state.services.add(d.toggleService); refreshBooking(); }
+  else if (d.pickBarber) { state.barber = d.pickBarber; if (state.date && !dayAvailable(state.date)) state.date = null; refreshBooking(); }
+  else if (d.bcat) { state.cat = d.bcat; renderBookServices(); }
+  else if (d.day) { state.date = new Date(calMonth.getFullYear(), calMonth.getMonth(), +d.day); state.time = null; renderCalendar(); renderSummary(); }
+  else if (d.time) { state.time = d.time; renderSlots(); renderSummary(); if (innerWidth < 1024) document.getElementById('step4').scrollIntoView({ behavior: 'smooth' }); }
+  else if (d.staff) { staffFilter = d.staff; renderStaff(); }
+  else if (t.hasAttribute('data-close')) closeModal();
+});
+$('#calPrev').addEventListener('click', () => { calMonth.setMonth(calMonth.getMonth() - 1); renderCalendar(); });
+$('#calNext').addEventListener('click', () => { calMonth.setMonth(calMonth.getMonth() + 1); renderCalendar(); });
+$('#confirmBtn').addEventListener('click', confirmBooking);
+$('#mbBtn').addEventListener('click', confirmBooking);
+$('#contactForm').addEventListener('input', e => { if (e.target.classList.contains('err')) contactValid(true); renderSummary(); });
+$('#contactForm').addEventListener('submit', e => { e.preventDefault(); confirmBooking(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#modal').classList.contains('hidden')) closeModal(); });
+window.addEventListener('popstate', () => route());
+// Links internos (#seccion) manejados por el router, sin depender del evento hashchange
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a || e.defaultPrevented) return;
+  e.preventDefault();
+  go(a.getAttribute('href').slice(1));
+});
+
+/* --- Inicio --- */
+$$('[data-img]').forEach(el => el.src = img(IMG[el.dataset.img]));
+$$('[data-wa-general]').forEach(a => a.href = waLink(`¡Hola ${CONFIG.businessName}! Quería hacer una consulta.`));
+$$('[data-phone-display]').forEach(e => e.textContent = CONFIG.phoneDisplay);
+$('#year').textContent = new Date().getFullYear();
+buildNav(); renderHome(); renderServices(); renderStaff(); renderLocation(); renderOpenBadge(); refreshBooking(); route();
+</script>
+</body>
+</html>
