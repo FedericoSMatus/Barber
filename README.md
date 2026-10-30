@@ -1,8 +1,5 @@
 # Patagonia Grooming Co. · Barbería & Club · Neuquén
 
-Sitio web de una sola página (`index.html`) con navegación entre secciones:
-Inicio, Servicios & Tarifas, Profesionales, Reservar Turno y Ubicación & Horarios.
-
 ## Reserva de turnos
 - El cliente elige servicio(s), barbero, día y horario, y completa sus datos.
 - **WhatsApp:** envía el pedido con un mensaje ya armado al número de la barbería.
