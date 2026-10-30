@@ -1,0 +1,13 @@
+{
+  "name": "patagonia-grooming-reservas",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Web de Patagonia Grooming Co. con reservas en Supabase y funciones de Vercel",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.118.0"
+  }
+}
